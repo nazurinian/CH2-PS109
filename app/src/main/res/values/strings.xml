@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Soil Ink</string>
+    <string name="title_home_activity">HomeActivity</string>
+    <string name="title_register_activity">RegisterActivity</string>
+    <string name="title_login_activity">LoginActivity</string>
+    <string name="title_splashscreen_activity">SplashscreenActivity</string>
+    <string name="soil_ink_image">Soil ink image</string>
+    <string name="input_name">Input name</string>
+    <string name="input_email">Input email</string>
+    <string name="input_password">Input password</string>
+    <string name="name">Full Name</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="signup">Sign Up</string>
+    <string name="signup_info">Sign Up!</string>
+    <string name="login">Log In</string>
+    <string name="login_info">Log In!</string>
+    <string name="login_button">Login button</string>
+    <string name="signup_button">Sign up button</string>
+    <string name="question_have_account">Don\'t have an account?\u0020</string>
+    <string name="have_account">Already have an account?\u0020</string>
+    <string name="to_page_signup"><u>Sign Up</u></string>
+    <string name="to_page_login"><u>Log In</u></string>
+    <string name="tb_signup">Sign Up Button</string>
+    <string name="tb_login">Log In Button</string>
+    <string name="logout">Log Out</string>
+    <string name="reset_password_page">Forgot Password?</string>
+    <string name="hallo_user">"Halo kak %s"</string>
+    <string name="welcome_user">"Selamat datang diaplikasi SoilInk"</string>
+    <string name="welcome_login">Welcome Back,</string>
+    <string name="hello_sign">Hello,</string>
+
+</resources>
