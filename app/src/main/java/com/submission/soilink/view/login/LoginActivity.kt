@@ -120,65 +120,6 @@ class LoginActivity : AppCompatActivity() {
                     create()
                     show()
                 }
-                /*viewModel.startLogin(dataUser).observe(this) { result ->
-                    if (result != null) {
-                        when (result) {
-                            is ResultState.Loading -> {
-                                showLoading(true)
-                                window.setFlags(
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                                )
-                            }
-
-                            is ResultState.Success -> {
-                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                showLoading(false)
-
-                                val dataResult = result.data.loginResult
-                                viewModel.saveSession(
-                                    UserModel(
-                                        dataResult?.name.toString(),
-                                        email.toString(),
-//                                        dataResult?.token.toString()
-                                    )
-                                )
-
-                                AlertDialog.Builder(this).apply {
-//                                    setTitle(getString(R.string.info_login_alert))
-                                    setTitle("Selamat...")
-//                                    setMessage(getString(R.string.login_message))
-                                    setMessage("Login berhasil dilakukan dengan menggunakan email: $email")
-                                    setCancelable(false)
-                                    setPositiveButton(getString(R.string.login)) { _, _ ->
-                                        val intentToHome = Intent(context, HomeActivity::class.java)
-                                        intentToHome.flags =
-                                            Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                        intentToHome.putExtra(
-                                            HomeActivity.USER_NAME,
-                                            dataResult?.name.toString()
-                                        )
-                                        startActivity(intentToHome)
-                                        finish()
-                                    }
-                                    create()
-                                    show()
-                                }
-                            }
-
-                            is ResultState.Error -> {
-                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                if (result.error.contains("email")) {
-//                                    emailLayout.error = getString(R.string.email_pattern)
-                                    emailLayout.error = "Isi dengan email"
-                                } else {
-                                    showToast(this, result.error)
-                                }
-                                showLoading(false)
-                            }
-                        }
-                    }
-                }*/
             } else {
                 if (emailField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
