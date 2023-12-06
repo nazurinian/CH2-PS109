@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "soilink-user-authentication",
+    "private_key_id": "3b95fef61c741c484ccba59c656c10d5bec3acd9",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDcLAORDNj3L7yo\n4s//SmHvsfZHX6f8CwvZiVKM7fsShyGOkX7sZCZY66R2ui7WeN73XCryVPw/kQgR\n2A8gaIZo08b6b+l6ikejeMkcvMHp6TAD87UoOwNIx8vGa1gyq3nktLcy0LZUMT46\nGNq4KDZirm18/UpXyB+B+ImfhgnY2GRAGjJ5z44TotcdIV5kpEGWLf28rJNqdKf9\nkzbsAROjHc9du2V9EPx8vZi/xlcmHZpRP+YYOxK0zchkCx4BJ9fpOgibskNs9mCR\n5VHVB8Pd5KPGX9Bd5eKzgAkJA+t3ox/dThEuQplImPsO8Hp9U/kHPwhSlauJhGYc\nLyNi7kMfAgMBAAECggEACWXM4SwYjAnQQQUtYPWJKJ9X+8PsJP3ztjKpALWdDzVl\nYUh55RfWldpjsrhPt30r8d2lQk1jrEhB0pZ+TsvSBjdujtH9YpWfE9iGp7YG240b\nLOVXc4LRU7yeHgyxlGLCroMS2WsUh+jHgdioZ/k6GQwzmtoqNNpTPfZLKYahykzz\nPzn72tt6eTY94cNEjOVfiKilC2OGTMPuj604rNdjT2VFpyWfkgacjW8Rz94kO7iL\nRn39WBXVi+wqxchYWCoDKs3bHOkkLoBQfTeuljDaWgIeIB6tcd8Aa7cTMgzzv088\n2lhg5+2JHMfNCPNQotDDNBUkIklyMHBaqjKXn03pgQKBgQD+Pt5OU7zQDYiszY++\nRZg1QOw10o/4sm/yetCEJ0CigiK9aicjzwiNTG1DB5l4+Kei/e0t2kKwo5GbU9rd\nIvgX4tZLf0ByyShKNmDtAk9HALH17LbXKYQJiwI0Axs6onBGGu4jZSgLiHcmt5pi\nmg113FCNFMXHQayfr3lfZeaQmQKBgQDdsPQa2/IKd8KjHHV4kk2IuwGQZFMdf687\n5EZy4oThvlWiwITBWIplDoxwLFfumhxAI2AI87wT0Cm/jdQtTEceB0WrCvjqDY1D\nuyp7eDt9Fx1vai5xd5Mt1g0vNzEg8jXi41Rnx0tEU3MsXx0WG0bwDhpjnymIl6fn\nIwQuN5TsdwKBgD3gcx5BBvzjrlXQGaHHMkoTqOlYe62dT92FwmXHX9WtMmNDCI+Q\nfZZV+WmM2e81JSdoAWddbUmsJW3WNLgJILQ/gsQRDlBhYKrfHSvRmhW/t5AQslcf\nRYFFEZ4y+1eD3StSto5quhpEdis4GBzTPV9n5TrQyWm7NBYREMsE895RAoGBALrJ\nB0NCIfLz6MhpiAhorG8RsUWpYeYu2MRLl5fghzl0ls6kCralFSYEVguFMSlWK4tW\nwumIAuVmtGYy55yq8hi449gzTHpXpLh2kFqreOPyf9iJzEvKBfXOrhkkFX6+1Owv\nwcQWxLHy5c1y7hzcKq7EEzPwvJvbu5ohhLo0FoQNAoGBAKunLfnJkOEYHGG4ckBL\nG8Z4ebTwc435VE5h+kjyvpxX/1ThSsQUm5PDknebI5xgYwzfl6st6SR/VU8ELnjf\nyLigh2hMRndrV+UQPVXKBMtw6nYTvzHpMGOLPyimFurAPOOCud92PVkMctj8oEjX\nKwDzOOGVII9Gf7+sXd1g6IpX\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-ojghe@soilink-user-authentication.iam.gserviceaccount.com",
+    "client_id": "118140294915242535304",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ojghe%40soilink-user-authentication.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
