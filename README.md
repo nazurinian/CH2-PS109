@@ -11,3 +11,8 @@ Soil Type Detection for Regional Development
 - (MD) A296BSY2201 - Muh Irsyad Dwi K. (Active)
 - (CC) C332BSX3670 - Annisa Putri Pawestri (Active)
 - (CC) C332BSY3616 - M. Ilham Anggis Bangkit Pamungkas (Active)
+
+## Branch
+- ***The ML Member Project is stored in the Main Branch***
+- ***The MD Member Project is stored in the MD Branch***
+- ***The CC Member Project is stored in the CC Branch***
