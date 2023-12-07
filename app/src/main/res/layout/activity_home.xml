@@ -10,14 +10,15 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorAccent">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/topAppBar"
+            style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:contentDescription="@string/app_name"
+            android:theme="@style/customTextColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:menu="@menu/option_menu"
             app:title="@string/app_name" />
@@ -43,8 +44,8 @@
             android:id="@+id/welcomeUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_user"
             android:layout_marginTop="30dp"
+            android:text="@string/welcome_user"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

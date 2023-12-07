@@ -29,5 +29,6 @@
     <string name="welcome_user">"Selamat datang diaplikasi SoilInk"</string>
     <string name="welcome_login">Welcome Back,</string>
     <string name="hello_sign">Hello,</string>
+    <string name="show_password">Show Password</string>
 
 </resources>

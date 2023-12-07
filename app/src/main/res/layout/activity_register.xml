@@ -49,6 +49,7 @@
             android:contentDescription="@string/hello_sign"
             android:text="@string/hello_sign"
             android:textSize="25sp"
+            android:theme="@style/customTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -65,6 +66,7 @@
             android:text="@string/signup_info"
             android:textSize="40sp"
             android:textStyle="bold"
+            android:theme="@style/customTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -234,8 +236,8 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/tb_login"
                     android:text="@string/to_page_login"
+                    android:textColor="@color/color_text_button"
                     android:textStyle="bold"
-                    android:tooltipText="@string/tb_login"
                     tools:layout_editor_absoluteX="161dp"
                     tools:layout_editor_absoluteY="0dp" />
             </LinearLayout>
