@@ -123,12 +123,12 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 if (emailField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = "Email tidak boleh kosong"
                     emailLayout.error = errorTextIsEmpty
                 }
                 if (passwordField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = "Password tidak boleh kosong"
                     passwordLayout.error = errorTextIsEmpty
                 }
             }

@@ -21,17 +21,35 @@
         android:theme="@style/Theme.SoilInk"
         tools:targetApi="31">
         <activity
+            android:name=".view.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.list.ListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.forgotpassword.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.detailhistory.DetailHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.camera.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.about.AboutActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.home.HomeActivity"
             android:exported="false"
             android:label="@string/title_home_activity" />
         <activity
             android:name=".view.register.RegisterActivity"
             android:exported="false"
-            android:label="@string/title_register_activity"/>
+            android:label="@string/title_register_activity" />
         <activity
             android:name=".view.login.LoginActivity"
             android:exported="false"
-            android:label="@string/title_login_activity"/>
+            android:label="@string/title_login_activity" />
         <activity
             android:name=".view.splashscreen.SplashScreen"
             android:exported="true"
