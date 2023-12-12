@@ -13,6 +13,7 @@
     "@hapi/cookie": "^12.0.1",
     "@hapi/hapi": "^21.3.2",
     "@hapi/inert": "^7.1.0",
+    "bcrypt": "^5.1.1",
     "firebase-admin": "^11.11.1",
     "hapi": "^18.1.0",
     "multer": "^1.4.5-lts.1"
