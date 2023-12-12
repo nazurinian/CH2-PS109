@@ -16,3 +16,6 @@ Soil Type Detection for Regional Development
 - ***The ML Member Project is stored in the Main Branch***
 - ***The MD Member Project is stored in the MD Branch***
 - ***The CC Member Project is stored in the CC Branch***
+
+## Figma UI/UX Design
+Link: https://www.figma.com/file/rT8IYnC8n4glnQXH8iGmWl/Figma-CH2-PS109?type=design&node-id=113-2&mode=design&t=t80OfvKoUzISS3LR-0
