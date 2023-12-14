@@ -17,6 +17,8 @@ import com.submission.soilink.databinding.ActivityHomeBinding
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
+import com.submission.soilink.view.profile.ProfileActivity
+import com.submission.soilink.view.profile.ProfileActivity.Companion.DATA_PROFILE
 import com.submission.soilink.view.soillist.SoilListActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -44,18 +46,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.btnLogout -> {
-                    viewModel.logout()
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
-                    true
-                }
+        val user = "Ilham Dhani"
+        val toolbar = binding.topAppBar
+        toolbar.title = resources.getString(R.string.user_login, user)
 
-                else -> false
-            }
+        binding.btnProfile.setOnClickListener {
+            val intent = Intent(this,  ProfileActivity::class.java)
+            intent.putExtra(DATA_PROFILE, user)
+            startActivity(intent)
         }
+
         binding.btnSoilList.setOnClickListener {
             val intent = Intent(this, SoilListActivity::class.java)
             startActivity(intent)

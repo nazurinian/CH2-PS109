@@ -20,8 +20,17 @@
             android:contentDescription="@string/app_name"
             android:theme="@style/customTextColor"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:menu="@menu/option_menu"
-            app:title="@string/app_name" />
+            app:title="@string/app_name" >
+
+            <ImageButton
+                android:id="@+id/btn_profile"
+                android:layout_width="50dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/profil_button"
+                android:layout_height="50dp" />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

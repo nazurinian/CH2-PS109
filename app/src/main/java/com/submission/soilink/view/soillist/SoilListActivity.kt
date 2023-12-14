@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.submission.soilink.data.SoilListData
 import com.submission.soilink.databinding.ActivitySoilListBinding
-import com.submission.soilink.view.soillistdetail.SoilListDetailActivity
-import com.submission.soilink.view.soillistdetail.SoilListDetailActivity.Companion.SOIL_DATA
+import com.submission.soilink.view.soildescription.SoilDescriptionActivity
+import com.submission.soilink.view.soildescription.SoilDescriptionActivity.Companion.SOIL_DATA
 
 class SoilListActivity : AppCompatActivity() {
 
@@ -18,7 +18,17 @@ class SoilListActivity : AppCompatActivity() {
         binding = ActivitySoilListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupAction()
         showSoilList()
+    }
+
+    private fun setupAction() {
+        val toolbar = binding.topAppBar
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
     }
 
     private fun showSoilList() {
@@ -27,7 +37,7 @@ class SoilListActivity : AppCompatActivity() {
         soilAdapter.layoutManager  = layoutManager
 
         val adapter = SoilListAdapter { soil ->
-            val detailIntent = Intent(this, SoilListDetailActivity::class.java)
+            val detailIntent = Intent(this, SoilDescriptionActivity::class.java)
             detailIntent.putExtra(SOIL_DATA, soil)
             startActivity(detailIntent)
         }

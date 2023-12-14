@@ -12,11 +12,4 @@ class HomeViewModel(private val repository: SoilInkRepository) : ViewModel() {
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
-
-    fun logout() {
-        viewModelScope.launch {
-            repository.logout()
-        }
-    }
-
 }

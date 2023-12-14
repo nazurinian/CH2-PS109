@@ -5,7 +5,7 @@
         <item
             android:id="@+id/btnLogout"
             android:contentDescription="@string/logout"
-            android:icon="@drawable/logout"
+            android:icon="@drawable/logout_button"
             android:title="@string/logout"
             app:showAsAction="ifRoom" />
     </group>

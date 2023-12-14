@@ -45,6 +45,8 @@
     <string name="login_trouble_send_link">Send reset link</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="question_back_to_login">Back to login page?\u0020</string>
+    <string name="user_login">Hi, %s</string>
+    <string name="profile">Profile</string>
 
 
 </resources>

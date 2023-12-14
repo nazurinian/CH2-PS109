@@ -20,7 +20,7 @@
             style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:contentDescription="@string/app_name"
+            android:contentDescription="Soil List"
             android:theme="@style/customTextColor"
             app:title="Soil List"
             app:titleCentered="true" />

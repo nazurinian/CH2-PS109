@@ -7,6 +7,7 @@ import com.submission.soilink.data.SoilInkRepository
 import com.submission.soilink.di.Injection
 import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.login.LoginViewModel
+import com.submission.soilink.view.profile.ProfileViewModel
 import com.submission.soilink.view.register.RegisterViewModel
 
 class ViewModelFactory(private val repository: SoilInkRepository) :
@@ -25,6 +26,10 @@ class ViewModelFactory(private val repository: SoilInkRepository) :
 
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
