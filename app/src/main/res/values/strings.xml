@@ -31,4 +31,16 @@
     <string name="hello_sign">Hello,</string>
     <string name="show_password">Show Password</string>
 
+
+    <string name="soil_inceptisol">Inceptisol</string>
+    <string name="soil_kapur">Kapur</string>
+    <string name="soil_pasir">Pasir</string>
+    <string name="soil_laterit">Laterit</string>
+    <string name="soil_humus">Humus</string>
+    <string name="soil_aluvial">Aluvial</string>
+    <string name="soil_andosol">Andosol</string>
+    <string name="soil_entisol">Entisol</string>
+
+
+
 </resources>

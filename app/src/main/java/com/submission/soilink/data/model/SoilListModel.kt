@@ -1,4 +1,9 @@
 package com.submission.soilink.data.model
 
-data class SoilListModel {
-}
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+
+data class SoilListModel (
+    @StringRes val soilTitle: Int,
+    @DrawableRes val soilImage: Int,
+)
