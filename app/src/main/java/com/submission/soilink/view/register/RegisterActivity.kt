@@ -57,14 +57,17 @@ class RegisterActivity : AppCompatActivity() {
         val nameField = binding.nameEditText
         val emailField = binding.emailEditText
         val passwordField = binding.passwordEditText
+        val confirmPasswordField = binding.confirmPasswordEditText
 
         val nameLayout = binding.nameEditTextLayout
         val emailLayout = binding.emailEditTextLayout
         val passwordLayout = binding.passwordEditTextLayout
+        val confirmPasswordLayout = binding.confirmPasswordEditTextLayout
 
         var name: String? = null
         var email: String? = null
         var password: String? = null
+        var confirmPassword: String? = null
 
         nameField.apply {
             layout = nameLayout
@@ -102,84 +105,100 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+        confirmPasswordField.apply {
+            layout = confirmPasswordLayout
+            minimumLength = 8
+//            errorMessage = getString(R.string.error_password_too_short)
+            errorMessage = "Konfirmasi kata sandi minimal 8 karakter"
+            doOnTextChanged { text, _, _, _ ->
+                confirmPassword = if (text.toString()
+                        .isEmpty() || text.toString().length < 8
+                ) null else text.toString()
+            }
+        }
+
         binding.signupButton.setOnClickListener {
-            if (!name.isNullOrEmpty() && !email.isNullOrEmpty() && !password.isNullOrEmpty()) {
-                val dataUser =
-                    LoginRegistrationModel(name.toString(), email.toString(), password.toString())
-                viewModel.startRegistration(dataUser).observe(this) { result ->
-                    if (result != null) {
-                        when (result) {
-                            is ResultState.Loading -> {
-                                showLoading(true)
-                                window.setFlags(
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                                )
-                            }
+            if (!name.isNullOrEmpty() && !email.isNullOrEmpty() && !password.isNullOrEmpty() && !confirmPassword.isNullOrEmpty()) {
+                if (confirmPassword != password) {
+                    showToast(this, "Password tidak sesuai")
+                } else {
+                    val dataUser =
+                        LoginRegistrationModel(name.toString(), email.toString(), password.toString())
+                    viewModel.startRegistration(dataUser).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is ResultState.Loading -> {
+                                    showLoading(true)
+                                    window.setFlags(
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                                    )
+                                }
 
-                            is ResultState.Success -> {
-                                viewModel.startLogin(dataUser).observe(this) { result ->
-                                    if (result != null) {
-                                        when (result) {
-                                            is ResultState.Loading -> {
-                                                showLoading(true)
-                                                window.setFlags(
-                                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                                                )
-                                            }
-
-                                            is ResultState.Success -> {
-                                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                                showLoading(false)
-
-                                                val dataResult = result.data.loginResult
-                                                viewModel.saveSession(
-                                                    UserModel(
-                                                        dataResult?.name.toString(),
-                                                        email.toString(),
-//                                                        dataResult?.token.toString()
+                                is ResultState.Success -> {
+                                    viewModel.startLogin(dataUser).observe(this) { result ->
+                                        if (result != null) {
+                                            when (result) {
+                                                is ResultState.Loading -> {
+                                                    showLoading(true)
+                                                    window.setFlags(
+                                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                                                     )
-                                                )
-
-                                                AlertDialog.Builder(this).apply {
-//                                                    setTitle(getString(R.string.info_register_alert))
-                                                    setTitle("Selamat...")
-//                                                    setMessage(getString(R.string.register_message, email))
-                                                    setMessage("Akun dengan email: $email berhasil dibuat")
-                                                    setCancelable(false)
-                                                    setPositiveButton(getString(R.string.login)) { _, _ ->
-                                                        val intentToHome = Intent(context, HomeActivity::class.java)
-                                                        intentToHome.flags =
-                                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                                        intentToHome.putExtra(HomeActivity.USER_NAME, name)
-                                                        startActivity(intentToHome)
-                                                        finish()
-                                                    }
-                                                    create()
-                                                    show()
                                                 }
-                                            }
 
-                                            is ResultState.Error -> {
-                                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                                showToast(this, result.error)
-                                                showLoading(false)
+                                                is ResultState.Success -> {
+                                                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                                    showLoading(false)
+
+                                                    val dataResult = result.data.loginResult
+                                                    viewModel.saveSession(
+                                                        UserModel(
+                                                            dataResult?.name.toString(),
+                                                            email.toString(),
+//                                                        dataResult?.token.toString()
+                                                        )
+                                                    )
+
+                                                    AlertDialog.Builder(this).apply {
+//                                                    setTitle(getString(R.string.info_register_alert))
+                                                        setTitle("Selamat...")
+//                                                    setMessage(getString(R.string.register_message, email))
+                                                        setMessage("Akun dengan email: $email berhasil dibuat")
+                                                        setCancelable(false)
+                                                        setPositiveButton(getString(R.string.login)) { _, _ ->
+                                                            val intentToHome = Intent(context, HomeActivity::class.java)
+                                                            intentToHome.flags =
+                                                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                                            intentToHome.putExtra(HomeActivity.USER_NAME, name)
+                                                            startActivity(intentToHome)
+                                                            finish()
+                                                        }
+                                                        create()
+                                                        show()
+                                                    }
+                                                }
+
+                                                is ResultState.Error -> {
+                                                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                                    showToast(this, result.error)
+                                                    showLoading(false)
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
 
-                            is ResultState.Error -> {
-                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                if (result.error.contains("email")) {
+                                is ResultState.Error -> {
+                                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                    if (result.error.contains("email")) {
 //                                    emailLayout.error = getString(R.string.email_pattern)
-                                    emailLayout.error = "Isi dengan email"
-                                } else {
-                                    showToast(this, result.error)
+                                        emailLayout.error = "Isi dengan email"
+                                    } else {
+                                        showToast(this, result.error)
+                                    }
+                                    showLoading(false)
                                 }
-                                showLoading(false)
                             }
                         }
                     }
@@ -199,6 +218,11 @@ class RegisterActivity : AppCompatActivity() {
 //                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
                     val errorTextIsEmpty = "Tidak boleh kosong"
                     passwordLayout.error = errorTextIsEmpty
+                }
+                if (confirmPasswordField.text.toString().isEmpty()) {
+//                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
+                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    confirmPasswordLayout.error = errorTextIsEmpty
                 }
             }
         }
@@ -231,13 +255,15 @@ class RegisterActivity : AppCompatActivity() {
             ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(250)
         val passwordEdit =
             ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(250)
+        val confirmPasswordEdit =
+            ObjectAnimator.ofFloat(binding.confirmPasswordEditTextLayout, View.ALPHA, 1f).setDuration(250)
         val signup = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(250)
 
         val haveAccount =
             ObjectAnimator.ofFloat(binding.haveAccount, View.ALPHA, 1f).setDuration(250)
 
         val firstAnimation = AnimatorSet().apply {
-            playSequentially(nameEdit, emailEdit, passwordEdit, signup)
+            playSequentially(nameEdit, emailEdit, passwordEdit, confirmPasswordEdit, signup)
             startDelay = 250
         }
 
