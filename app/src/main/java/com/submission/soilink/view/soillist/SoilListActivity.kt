@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.submission.soilink.R
+import com.submission.soilink.data.SoilListData
 import com.submission.soilink.databinding.ActivitySoilListBinding
 import com.submission.soilink.view.soillistdetail.SoilListDetailActivity
+import com.submission.soilink.view.soillistdetail.SoilListDetailActivity.Companion.SOIL_DATA
 
 class SoilListActivity : AppCompatActivity() {
 
@@ -17,21 +18,22 @@ class SoilListActivity : AppCompatActivity() {
         binding = ActivitySoilListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        binding.rvSoilList.layoutManager = layoutManager
-
         showSoilList()
     }
 
     private fun showSoilList() {
+        val layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        val soilAdapter = binding.rvSoilList
+        soilAdapter.layoutManager  = layoutManager
+
         val adapter = SoilListAdapter { soil ->
             val detailIntent = Intent(this, SoilListDetailActivity::class.java)
-            detailIntent.putExtra(SOIL_ID, soil.id)
+            detailIntent.putExtra(SOIL_DATA, soil)
             startActivity(detailIntent)
         }
-        viewModel.habits.observe(this) { habit ->
-            adapter.submitList(habit)
-        }
-        recycler.adapter = adapter
+
+        soilAdapter.adapter = adapter
+
+        adapter.submitList(SoilListData().soilList())
     }
 }

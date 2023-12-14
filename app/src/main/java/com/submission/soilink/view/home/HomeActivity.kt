@@ -17,6 +17,7 @@ import com.submission.soilink.databinding.ActivityHomeBinding
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
+import com.submission.soilink.view.soillist.SoilListActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -54,6 +55,10 @@ class HomeActivity : AppCompatActivity() {
 
                 else -> false
             }
+        }
+        binding.btnSoilList.setOnClickListener {
+            val intent = Intent(this, SoilListActivity::class.java)
+            startActivity(intent)
         }
     }
 
