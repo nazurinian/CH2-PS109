@@ -21,10 +21,16 @@
         android:theme="@style/Theme.SoilInk"
         tools:targetApi="31">
         <activity
+            android:name=".view.soillistdetail.SoilListDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.soillist.SoilListActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.profile.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".view.list.ListActivity"
+            android:name=".view.soillist.ListActivity"
             android:exported="false" />
         <activity
             android:name=".view.forgotpassword.ForgotPasswordActivity"

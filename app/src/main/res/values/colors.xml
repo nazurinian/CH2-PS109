@@ -41,6 +41,7 @@
     <color name="color_ellipse_shape">#BF0E4B35</color>
     <color name="color_text_button">#FF2F71D4</color>
     <color name="color_edit_text_layout">#406B9B75</color>
+    <color name="color_stroke_soil_list_card">#AAE2AF</color>
 
     <color name="ic_soilink_launcher_background">#FFFFFF</color>
 </resources>
