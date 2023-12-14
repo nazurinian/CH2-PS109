@@ -20,6 +20,7 @@ import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.databinding.ActivityLoginBinding
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
+import com.submission.soilink.view.forgotpassword.ForgotPasswordActivity
 import com.submission.soilink.view.home.HomeActivity
 import com.submission.soilink.view.register.RegisterActivity
 
@@ -132,6 +133,11 @@ class LoginActivity : AppCompatActivity() {
                     passwordLayout.error = errorTextIsEmpty
                 }
             }
+        }
+
+        binding.forgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
         }
 
         binding.signupPageButton.setOnClickListener {

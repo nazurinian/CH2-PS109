@@ -44,6 +44,7 @@
     <string name="login_trouble_info">Enter your email associated with your account to change your password.</string>
     <string name="login_trouble_send_link">Send reset link</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="question_back_to_login">Back to login page?\u0020</string>
 
 
 </resources>

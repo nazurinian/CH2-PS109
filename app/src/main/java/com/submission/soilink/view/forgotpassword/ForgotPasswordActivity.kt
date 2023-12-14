@@ -71,7 +71,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
 
-        binding.loginButton.setOnClickListener {
+        binding.resetButton.setOnClickListener {
             if (!email.isNullOrEmpty()) {
                 //email yg mau direset paswordnya
 
@@ -101,8 +101,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
 
-        binding.signupPageButton.setOnClickListener {
+        binding.loginPageButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
     }
@@ -124,8 +125,13 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         val emailEdit =
             ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(250)
+        val resetButton = ObjectAnimator.ofFloat(binding.resetButton, View.ALPHA, 1f).setDuration(250)
+
+        val haveAccount =
+            ObjectAnimator.ofFloat(binding.haveAccount, View.ALPHA, 1f).setDuration(250)
+
         val firstAnimation = AnimatorSet().apply {
-            playSequentially(emailEdit)
+            playSequentially(emailEdit, resetButton, haveAccount)
             startDelay = 250
         }
 
