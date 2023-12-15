@@ -2,6 +2,8 @@ package com.submission.soilink.view.soildescription
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.submission.soilink.R
+import com.submission.soilink.data.model.SoilListModel
 import com.submission.soilink.databinding.ActivitySoilDescriptionBinding
 
 class SoilDescriptionActivity : AppCompatActivity() {
@@ -13,12 +15,22 @@ class SoilDescriptionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        setupLayout()
     }
 
     private fun setupAction() {
         val toolbar = binding.topAppBar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun setupLayout() {
+        val data = intent.getParcelableExtra<SoilListModel>(SOIL_DATA)
+        data?.apply {
+            binding.ivSoilDescription.setImageResource(soilImage)
+            binding.tvTitle.text = resources.getString(R.string.soil_title, getString(soilTitle))
+            binding.tvDescription.text = "Masi Kosong woi"
+        }
     }
 
     companion object {

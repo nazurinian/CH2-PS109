@@ -20,6 +20,13 @@
         <item name="android:colorBackground">@color/md_theme_light_background</item>
         <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
 
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+<!--        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>-->
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+<!--        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>-->
+<!--        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>-->
+
         <item name="android:statusBarColor">@color/color_status_bar</item>
 
         <item name="android:windowActivityTransitions">true</item>
@@ -36,6 +43,14 @@
     </style>
 
     <style name="Theme.SoilInk" parent="Base.Theme.SoilInk" />
+
+    <style name="FullScreen" parent="Base.Theme.SoilInk">
+        <item name="android:color">@color/theme_light_onPrimaryContainer</item>
+    </style>
+
+    <style name="HomeAppbar" parent="Base.Theme.SoilInk">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="SplashScreenTheme" parent="Base.Theme.SoilInk">
         <item name="android:windowDisablePreview">true</item>

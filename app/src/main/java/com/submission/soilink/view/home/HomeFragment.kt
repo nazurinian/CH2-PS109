@@ -11,7 +11,9 @@ import com.submission.soilink.R
 import com.submission.soilink.data.pref.UserPreference
 import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.FragmentHomeBinding
+import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
+import com.submission.soilink.view.about.AboutActivity
 import com.submission.soilink.view.profile.ProfileActivity
 import com.submission.soilink.view.soillist.SoilListActivity
 import kotlinx.coroutines.flow.first
@@ -42,8 +44,7 @@ class HomeFragment : Fragment() {
 //        ApiConfig.token = user.token
 
         setupAction()
-
-        binding.thisUser.text = requireActivity().getString(R.string.hallo_user, user.name)
+//        binding.thisUser.text = requireActivity().getString(R.string.hallo_user, user.name)
     }
 
     private fun setupAction() {
@@ -57,8 +58,17 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.btnCheckSoil.setOnClickListener {
+            showToast(requireContext(),"Fitur ini belum tersedia")
+        }
+
         binding.btnSoilList.setOnClickListener {
             val intent = Intent(activity, SoilListActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnAboutSoilInk.setOnClickListener {
+            val intent = Intent(activity, AboutActivity::class.java)
             startActivity(intent)
         }
     }

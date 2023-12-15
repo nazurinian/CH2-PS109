@@ -49,6 +49,7 @@
     <string name="profile">Profile</string>
     <string name="title_history">History</string>
     <string name="title_home">Home</string>
+    <string name="soil_title">Tanah %s</string>
 
 
 </resources>

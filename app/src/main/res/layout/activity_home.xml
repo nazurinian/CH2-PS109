@@ -44,12 +44,11 @@
 
 
         <fragment
-            android:id="@+id/nav_host_fragment_activity_main"
+            android:id="@+id/nav_host_fragment_activity_home"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="114dp"
-            android:paddingBottom="40dp"
+            android:layout_marginBottom="94dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/nav_view1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -69,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="parent"/>
 
     <ImageButton
-        android:id="@+id/ib_camera"
+        android:id="@+id/btn_camera"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:scaleType="fitXY"

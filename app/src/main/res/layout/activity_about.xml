@@ -6,4 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".view.about.AboutActivity">
 
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/customTextColor"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="About"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/soil_ink_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/container1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/soil_about_container"
+            android:padding="14dp"
+            android:theme="@style/customTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo">
+
+            <TextView
+                android:id="@+id/about1"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Soilink hadir sebagai mitra Anda dalam merencanakan masa depan pembangunan yang berkelanjutan dan efisien. Mari bergabung bersama kami untuk membuat setiap proyek konstruksi menjadi sukses dengan pemilihan tanah yang tepat."
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/container1"
+                app:layout_constraintEnd_toEndOf="@+id/container1"
+                app:layout_constraintStart_toStartOf="@+id/container1"
+                app:layout_constraintTop_toTopOf="@+id/container1" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/container2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/soil_about_container"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:theme="@style/customTextColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container1">
+
+            <TextView
+                android:id="@+id/about2_title"
+                style="@style/TextAppearance.Material3.TitleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="Tujuan"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/container2"
+                app:layout_constraintEnd_toEndOf="@+id/container2"
+                app:layout_constraintStart_toStartOf="@+id/container2"
+                app:layout_constraintTop_toTopOf="@+id/container2" />
+
+            <TextView
+                android:id="@+id/about2"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Soilink bertujuan untuk memberikan bantuan berharga kepada masyarakat umum, pengembang properti, dan perencana kota. Kami tidak hanya menyediakan informasi detil tentang jenis tanah, tetapi juga berfokus pada cara efektif untuk mengenali tanah dengan akurasi tinggi. Melalui aplikasi ini, kami berkomitmen untuk meningkatkan keberlanjutan dan efisiensi dalam pengembangan daerah."
+                android:textAlignment="center"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

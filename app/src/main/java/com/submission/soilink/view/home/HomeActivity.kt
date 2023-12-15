@@ -1,5 +1,6 @@
 package com.submission.soilink.view.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,6 +10,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.submission.soilink.R
 import com.submission.soilink.databinding.ActivityHomeBinding
 import com.submission.soilink.view.ViewModelFactory
+import com.submission.soilink.view.camera.CameraActivity
+import com.submission.soilink.view.soillist.SoilListActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -30,7 +33,7 @@ class HomeActivity : AppCompatActivity() {
         val navView1: BottomNavigationView = binding.navView1
         val navView2: BottomNavigationView = binding.navView2
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navController = findNavController(R.id.nav_host_fragment_activity_home)
 
         navView1.apply {
             setupWithNavController(navController)
@@ -39,6 +42,11 @@ class HomeActivity : AppCompatActivity() {
         navView2.apply {
             setupWithNavController(navController)
             itemIconTintList = null
+        }
+
+        binding.btnCamera.setOnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
         }
     }
 }

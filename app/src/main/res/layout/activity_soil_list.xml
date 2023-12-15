@@ -51,19 +51,23 @@
 
         <TextView
             android:id="@+id/tv_soil_list_title"
+            style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Let’s find your soil"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_soil_list_information"
+            style="@style/TextAppearance.Material3.TitleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:justificationMode="inter_word"
             android:text="Explore various soil types and discover the perfect match for your needs. Click on each soil type to find detailed information."
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:alpha="0"
         android:contentDescription="@string/soil_ink_image"
         android:src="@drawable/soil_ink_logo"

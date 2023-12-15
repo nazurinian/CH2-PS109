@@ -22,16 +22,16 @@
         tools:targetApi="31">
         <activity
             android:name=".view.soildescription.SoilDescriptionActivity"
-            android:parentActivityName=".view.soillist.SoilListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.soillist.SoilListActivity" />
         <activity
             android:name=".view.soillist.SoilListActivity"
-            android:parentActivityName=".view.home.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.home.HomeActivity" />
         <activity
             android:name=".view.profile.ProfileActivity"
-            android:parentActivityName=".view.home.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.home.HomeActivity" />
         <activity
             android:name=".view.forgotpassword.ForgotPasswordActivity"
             android:exported="false" />
@@ -40,12 +40,12 @@
             android:exported="false" />
         <activity
             android:name=".view.camera.CameraActivity"
-            android:parentActivityName=".view.home.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/FullScreen" />
         <activity
             android:name=".view.about.AboutActivity"
-            android:parentActivityName=".view.home.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.home.HomeActivity" />
         <activity
             android:name=".view.home.HomeActivity"
             android:exported="false"

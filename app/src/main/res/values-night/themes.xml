@@ -20,6 +20,13 @@
         <item name="android:colorBackground">@color/md_theme_dark_background</item>
         <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
 
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+<!--        <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>-->
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
+<!--        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>-->
+<!--        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>-->
+
         <item name="android:statusBarColor">@color/color_status_bar</item>
 
         <item name="android:windowActivityTransitions">true</item>
