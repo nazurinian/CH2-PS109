@@ -25,14 +25,34 @@
             app:title="@string/profile"
             app:titleCentered="true">
 
-            <ImageButton
-                android:id="@+id/btn_logout"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="vertical"
                 android:layout_gravity="end|center"
+                android:layout_width="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/logout_button" />
+                android:paddingBottom="8dp"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/btn_logout"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/logout_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:text="@string/logout"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_logout"
+                    app:layout_constraintStart_toStartOf="@+id/btn_logout" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

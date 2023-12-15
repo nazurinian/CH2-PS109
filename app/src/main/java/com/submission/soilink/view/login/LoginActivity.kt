@@ -13,12 +13,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import com.submission.soilink.view.home.HomeFragment.Companion.USER_NAME
 import com.submission.soilink.R
 import com.submission.soilink.data.model.LoginRegistrationModel
-import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.databinding.ActivityLoginBinding
-import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.forgotpassword.ForgotPasswordActivity
 import com.submission.soilink.view.home.HomeActivity
@@ -111,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                         intentToHome.flags =
                             Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
                         intentToHome.putExtra(
-                            HomeActivity.USER_NAME,
+                            USER_NAME,
                             email.toString()
 //                            dataResult?.name.toString()
                         )

@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import com.submission.soilink.view.home.HomeFragment.Companion.USER_NAME
 import com.submission.soilink.R
 import com.submission.soilink.data.model.LoginRegistrationModel
 import com.submission.soilink.data.ResultState
@@ -170,7 +171,7 @@ class RegisterActivity : AppCompatActivity() {
                                                             val intentToHome = Intent(context, HomeActivity::class.java)
                                                             intentToHome.flags =
                                                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                                            intentToHome.putExtra(HomeActivity.USER_NAME, name)
+                                                            intentToHome.putExtra(USER_NAME, name)
                                                             startActivity(intentToHome)
                                                             finish()
                                                         }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import com.submission.soilink.view.home.HomeFragment.Companion.USER_NAME
 import com.submission.soilink.databinding.ActivitySplashScreenBinding
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.home.HomeActivity
@@ -44,7 +45,7 @@ class SplashScreen : AppCompatActivity() {
                 finish()
             } else {
                 val intentToHome = Intent(this, HomeActivity::class.java)
-                intentToHome.putExtra(HomeActivity.USER_NAME, user.name)
+                intentToHome.putExtra(USER_NAME, user.name)
                 startActivity(intentToHome)
                 finish()
             }
