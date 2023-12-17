@@ -51,5 +51,17 @@
     <string name="title_home">Home</string>
     <string name="soil_title">Tanah %s</string>
 
+    <string name="full_name">Full Name</string>
+    <string name="email_address">emailaddress@gmail.com</string>
+    <string name="cn_name">Change Name</string>
+    <string name="cn_password">Change Password</string>
+    <string name="recent_act">Recent Activity</string>
+    <string name="view_all">View All > </string>
+    <string name="type_soil">Type Of Soil</string>
+    <string name="date_recent">24, Januari 2024</string>
+    <string name="time_recent">13.41 WIB</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
