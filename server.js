@@ -3,10 +3,22 @@ const admin = require('firebase-admin');
 const Path = require('path');
 const Multer = require('multer');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const firebase = require('firebase/app');
+const firebaseauth = require('firebase/auth');
 const { Storage } = require('@google-cloud/storage');
 const nodemailer = require('nodemailer');
-const validator = require('validator');
-const port = process.env.PORT || 5000;
+const smtpTransport = require('nodemailer-smtp-transport');
+const { OAuth2Client } = require('google-auth-library');
+const googleClientId = '985911723534-nt20v2sijh9s2e9qnbjfv36dpgkh9q5c.apps.googleusercontent.com';
+const googleClientSecret = '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';
+const port = process.env.PORT || 3000;
+
+const client = new OAuth2Client({
+  clientId: googleClientId,
+  clientSecret: googleClientSecret,
+});
+
 
 const storage = new Storage({
   keyFilename: 'soilink.json', // Ganti dengan path file kredensial Anda
@@ -20,6 +32,15 @@ const firebaseConfig = require('./firebaseConfig.json');
 admin.initializeApp({
   credential: admin.credential.cert(firebaseConfig),
 });
+
+firebase.initializeApp(firebaseConfig);
+
+function generateUniqueToken() {
+  const timestamp = new Date().getTime();
+  const randomChars = Math.random().toString(36).substring(2, 8);
+  return `${timestamp}-${randomChars}`;
+};
+
 
 const init = async () => {
   const server = Hapi.server({
@@ -40,19 +61,109 @@ const init = async () => {
   });
 
 
+  server.route({
+    method: 'GET',
+    path: '/login',
+    handler: (request, h) => {
+      return h.file(Path.join(__dirname, 'views', 'login.html'));
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/signup',
+    handler: (request, h) => {
+      return h.file(Path.join(__dirname, 'views', 'signup.html'));
+    },
+  });
+
   // server.route({
   //   method: 'GET',
   //   path: '/login',
   //   handler: (request, h) => {
-  //     return h.file(Path.join(__dirname, 'views', 'login.html'));
+  //     try {
+  //       // Logika autentikasi, jika diperlukan
+        
+  //       // Jika autentikasi berhasil
+  //       return h.response({ success: true }).code(200);
+        
+  //       // Jika autentikasi gagal
+  //       // return h.response({ success: false, message: 'Autentikasi gagal' }).code(401);
+        
+  //     } catch (error) {
+  //       console.error(error);
+  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
+  //     }
+  //   },
+  // });
+  
+  // server.route({
+  //   method: 'GET',
+  //   path: '/signup',
+  //   handler: (request, h) => {
+  //     try {
+  //       // Logika pendaftaran, jika diperlukan
+        
+  //       // Jika pendaftaran berhasil
+  //       return h.response({ success: true }).code(200);
+        
+  //       // Jika pendaftaran gagal
+  //       // return h.response({ success: false, message: 'Pendaftaran gagal' }).code(403);
+        
+  //     } catch (error) {
+  //       console.error(error);
+  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
+  //     }
   //   },
   // });
 
   // server.route({
   //   method: 'GET',
+  //   path: '/login',
+  //   handler: async (request, h) => {
+  //     try {
+  //       // Logika autentikasi, jika diperlukan
+        
+  //       // Contoh autentikasi yang selalu menghasilkan kesalahan
+  //       throw new Error('Autentikasi gagal');
+        
+  //       // Jika autentikasi berhasil
+  //       return h.response({ success: true }).code(200);
+        
+  //     } catch (error) {
+  //       console.error(error);
+  
+  //       // Catat detail kesalahan ke log file atau sistem pelacakan kesalahan
+  //       // fs.appendFileSync('error.log', `${new Date().toISOString()}: ${error.message}\n`);
+  
+  //       // Kembalikan respons HTTP dengan pesan kesalahan yang umum
+  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
+  //     }
+  //   },
+  // });
+  
+  // server.route({
+  //   method: 'GET',
   //   path: '/signup',
-  //   handler: (request, h) => {
-  //     return h.file(Path.join(__dirname, 'views', 'signup.html'));
+  //   handler: async (request, h) => {
+  //     try {
+  //       // Logika pendaftaran, jika diperlukan
+        
+  //       // Contoh pendaftaran yang selalu menghasilkan kesalahan
+  //       throw new Error('Pendaftaran gagal');
+        
+  //       // Jika pendaftaran berhasil
+  //       return h.response({ success: true }).code(200);
+        
+  //     } catch (error) {
+  //       console.error(error);
+  
+  //       // Catat detail kesalahan ke log file atau sistem pelacakan kesalahan
+  //       // fs.appendFileSync('error.log', `${new Date().toISOString()}: ${error.message}\n`);
+  
+  //       // Kembalikan respons HTTP dengan pesan kesalahan yang umum
+  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
+  //     }
   //   },
   // });
 
@@ -64,11 +175,6 @@ const init = async () => {
         const { email, password } = request.payload;
   
         console.log('Login attempt for email:', email);
-        
-        //password dan email harus diisi
-        if (!email || !password) {
-          return h.response({ success: false, message: 'Email dan password harus diisi' }).code(400);
-        }
   
         // Dapatkan informasi khusus untuk otentikasi dari Firestore
         const userDoc = await admin.firestore().collection('users').doc(email).get();
@@ -103,7 +209,8 @@ const init = async () => {
       }
     },
   });
-  
+  // Route untuk signup
+  // Route untuk signup
   server.route({
     method: 'POST',
     path: '/signup',
@@ -140,220 +247,182 @@ const init = async () => {
       }
     },
   });
-
-  // server.route({
-  //   method: 'POST',
-  //   path: '/login',
-  //   handler: async (request, h) => {
-  //     const { email, password } = request.payload;
   
-  //     try {
-  //       if (!email || !password) {
-  //         return h.response({ success: false, message: 'Email dan password harus diisi' }).code(400);
-  //       }
-  //       const userRecord = await admin.auth().getUserByEmail(email);
-  //       // Verifikasi password di sini (Anda dapat menggunakan library seperti bcrypt)
-  //       // Jika password sesuai, set session dengan ID pengguna
-  //       if (request.auth && !request.auth.isAuthenticated && request.auth.artifacts) {
-  //         request.auth.artifacts = { uid: userRecord.uid };
-  //       }
-                
-  //       return { success: true, message: 'Login berhasil', user: userRecord.toJSON() };
-  //     } catch (error) {
-  //       if (error.code === 'auth/user-not-found') {
-  //         // Handle ketika pengguna tidak ditemukan
-  //         return h.response({ success: false, message: 'Login gagal: Pengguna tidak ditemukan' }).code(401);
-  //       } else {
-  //         // Handle kesalahan lainnya
-  //         console.error('Error during login:', error.message);
-  //         return h.response({ success: false, message: 'Login gagal' }).code(401);
-  //       }
-  //     }
-  //   },
-  // });
+  server.route({
+    method: 'POST',
+    path: '/forgot-password',
+    handler: async (request, h) => {
+      try {
+        const { email } = request.payload;
   
-  // server.route({
-  //   method: 'POST',
-  //   path: '/signup',
-  //   handler: async (request, h) => {
-  //     const { nama, email, username, password, confirmPassword } = request.payload;
+        // Verifikasi apakah email ada dalam sistem
+        const userRecord = await admin.auth().getUserByEmail(email);
   
-  //     if (password !== confirmPassword) {
-  //       return { success: false, message: 'Konfirmasi password tidak sesuai' };
-  //     }
+        // Token unik untuk reset password
+        const resetToken = generateUniqueToken();
   
-  //     try {
-  //       const userRecord = await admin.auth().createUser({
-  //         email,
-  //         password,
-  //         displayName: nama,
-  //       });
+        // Set waktu reset
+        const expirationTime = new Date();
+        expirationTime.setHours(expirationTime.getHours() + 1); // Add 1 hour
   
-  //       if (request.auth && !request.auth.isAuthenticated && request.cookieAuth) {
-  //         request.cookieAuth.set({ uid: userRecord.uid });
-  //       }
+        await admin.firestore().collection('passwordResetTokens').doc(email).set({
+          token: resetToken,
+          expirationTime: expirationTime,
+        });
   
-  //       return { success: true, message: 'Signup berhasil', user: userRecord.toJSON() };
-  //     } catch (error) {
-  //       console.error('Error during signup:', error.message);
-  //       return h.response({ success: false, message: 'Signup gagal', error: error.message }).code(400);
-  //     }
-  //   },
-  // });
+        // Link untuk reset token
+        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+  
+        // Create nodemailer transporter
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'soilinkidn@gmail.com',
+            pass: 'eucp bkjg cvyq egaq', // Use the generated App Password here
+          },
+        });
+  
+        // Pengaturan Format Pengiriman Email
+        const mailOptions = {
+          from: 'soilinkidn@gmail.com',
+          to: email,
+          subject: 'Forgot Password - Reset Link',
+          text: `Click on the following link to reset your password: ${resetLink}`,
+        };
+  
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
 
+        await admin.firestore().collection('passwordResetTokens').doc(email).set({
+          token: resetToken,
+          expirationTime: expirationTime,
+          email: email, // tambahkan informasi email
+        });
 
-// ...
-
-server.route({
-  method: 'POST',
-  path: '/forgot-password',
-  handler: async (request, h) => {
-    try {
-      const { email } = request.payload;
-
-      // Verifikasi apakah email ada dalam sistem
-      const userRecord = await admin.auth().getUserByEmail(email);
-
-      // Token unik untuk reset password
-      const resetToken = generateUniqueToken();
-
-      // Set waktu reset
-      const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 1); // Add 1 hour
-
-      await admin.firestore().collection('passwordResetTokens').doc(email).set({
-        token: resetToken,
-        expirationTime: expirationTime,
-      });
-
-      // Link untuk reset token
-      const resetLink = `https://soilink.et.r.appspot.com//reset-password?token=${resetToken}`;
-
-      // Create nodemailer transporter
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'soilinkidn@gmail.com',
-          pass: 'eucp bkjg cvyq egaq', // Use the generated App Password here
-        },
-      });
-
-      // Pengaturan Format Pengiriman Email
-      const mailOptions = {
-        from: 'soilinkidn@gmail.com',
-        to: email,
-        subject: 'Forgot Password - Reset Link',
-        text: `Click on the following link to reset your password: ${resetLink}`,
-      };
-
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Email sent:', info.response);
-
-      return h.response({ success: true, message: 'Reset password link sent successfully.' });
-    } catch (error) {
-      console.error('Error during forgot password:', error.message);
-      return h.response({ success: false, message: 'Failed to process forgot password request.' }).code(500);
-    }
-  },
-});
-
-  // Fungsi untuk menghasilkan token unik
-  function generateUniqueToken() {
-    const timestamp = new Date().getTime();
-    const randomChars = Math.random().toString(36).substring(2, 8);
-    return `${timestamp}-${randomChars}`;
-  }
-
-
+        return h.response({ success: true, message: 'Reset password link sent successfully.' });
+      } catch (error) {
+        console.error('Error during forgot password:', error.message);
+        return h.response({ success: false, message: 'Failed to process forgot password request.' }).code(500);
+      }
+    },
+  });
+  
+  server.route({
+    method: 'GET',
+    path: '/reset-password',
+    handler: async (request, h) => {
+      try {
+        const { token } = request.query;
+  
+        // Dapatkan informasi reset token dan waktu kadaluarsa dari Firestore
+        const resetTokenDoc = await admin.firestore().collection('passwordResetTokens').where('token', '==', token).get();
+        if (resetTokenDoc.empty) {
+          return h.response({ success: false, message: 'Token reset password tidak valid atau telah kadaluarsa.' });
+        }
+  
+        const resetTokenData = resetTokenDoc.docs[0].data();
+        const expirationTime = resetTokenData.expirationTime.toDate();
+  
+        if (expirationTime < new Date()) {
+          return h.response({ success: false, message: 'Token reset password telah kadaluarsa.' });
+        }
+  
+        // Tampilkan halaman reset password
+        return h.file(Path.join(__dirname, 'views', 'reset-password.html'));
+      } catch (error) {
+        console.error('Error during reset password page load:', error.message);
+        return h.response({ success: false, message: 'Gagal memuat halaman reset password.' }).code(500);
+      }
+    },
+  });
   
   server.route({
     method: 'POST',
     path: '/reset-password',
     handler: async (request, h) => {
       try {
-        const { email, newPassword } = request.payload;
+        const { token, newPassword, confirmNewPassword } = request.payload;
   
-        // Validasi Format Email
-        if (!isValidEmail(email)) {
-          return h.response({ success: false, message: 'Invalid email format' }).code(400);
+        // Dapatkan informasi reset token dan waktu kadaluarsa dari Firestore
+        const resetTokenDoc = await admin.firestore().collection('passwordResetTokens').where('token', '==', token).get();
+        if (resetTokenDoc.empty) {
+          return h.response({ success: false, message: 'Token reset password tidak valid atau telah kadaluarsa.' });
         }
   
-        if (typeof newPassword === 'undefined' || newPassword.trim() === '') {
-          return h.response({ success: false, message: 'New password is missing or empty' }).code(400);
+        const resetTokenData = resetTokenDoc.docs[0].data();
+        const expirationTime = resetTokenData.expirationTime.toDate();
+        const email = resetTokenData.email; // Definisikan variabel email
+  
+        if (expirationTime < new Date()) {
+          return h.response({ success: false, message: 'Token reset password telah kadaluarsa.' });
         }
   
-        // Dapatkan informasi pengguna berdasarkan email
-        const userRecord = await admin.auth().getUserByEmail(email);
+        if (newPassword === confirmNewPassword) {
+          // Update password khusus untuk otentikasi di Firestore
+          const hashedNewPassword = await bcrypt.hash(newPassword, 10);
   
-        // Update password pengguna
-        await admin.auth().updateUser(userRecord.uid, {
-          password: newPassword,
-        });
+          // Gantilah email dengan email yang digunakan pada saat membuat reset token
+          console.log('Email:', email);
+          const userDoc = await admin.firestore().collection('users').doc(email).get();
+          await admin.firestore().collection('users').doc(email).set({
+            customAuthInfo: hashedNewPassword,
+          }, { merge: true }); // Menggunakan merge: true untuk menggabungkan data dengan dokumen yang sudah ada
   
-        return h.response({ success: true, message: 'Password reset successfully.' });
+          // Hapus reset token dari Firestore setelah digunakan
+          await admin.firestore().collection('passwordResetTokens').doc(email).delete();
+  
+          return { success: true, message: 'Password berhasil direset.' };
+        } else {
+          return { success: false, message: 'Konfirmasi password baru tidak sesuai.' };
+        }
       } catch (error) {
         console.error('Error during password reset:', error.message);
-        return h.response({ success: false, message: 'Failed to reset password.' }).code(500);
+        return h.response({ success: false, message: 'Reset password gagal', error: error.message }).code(400);
       }
     },
   });
-    function isValidEmail(email) {
-      return validator.isEmail(email);
-    }
-  
-  
-  
- 
   
   server.route({
-    method: 'POST',
-    path: '/upload',
-    handler: async (request, h) => {
-      try {
-        // Menangkap file dari formulir HTML dengan nama 'image'
-        const file = request.payload.image;
-
-        // Mengekstrak informasi file
-        const fileName = file.hapi.filename;
-        const data = file._data;
-
-        // Membuat stream file
-        const blob = bucket.file(fileName);
-        const blobStream = blob.createWriteStream({
-          resumable: false,
-          metadata: {
-            contentType: file.hapi.headers['content-type'],
-          },
-        });
-
-        blobStream.on('error', (err) => {
-          console.error(err);
-          return h.response({ success: false, message: 'Gagal mengunggah gambar' }).code(500);
-        });
-
-        blobStream.on('finish', async () => {
-          // Mendapatkan URL publik gambar
-          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-
-          return h.response({ success: true, message: 'Gambar berhasil diunggah', imageUrl: publicUrl });
-        });
-
-        // Menulis data ke stream file
-        blobStream.end(data);
-      } catch (error) {
-        console.error(error);
-        return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
-      }
-    },
-    options: {
-      payload: {
-        output: 'stream',
-        allow: 'multipart/form-data',
-        parse: true,
-        maxBytes: 2 * 1024 * 1024, // Batas ukuran file (2 MB)
-      },
+    method: 'GET',
+    path: '/login/google',
+    handler: (request, h) => {
+      // Redirect ke URL otorisasi Google
+      const redirectUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${client.options.clientId}&redirect_uri=${encodeURIComponent('http://localhost:3000/login/google/callback')}&response_type=code&scope=email%20profile&access_type=offline`;
+      return h.redirect(redirectUrl);
     },
   });
+  
+  server.route({
+    method: 'GET',
+    path: '/login/google/callback',
+    handler: async (request, h) => {
+      try {
+        const { code } = request.query;
+  
+        // Dapatkan token akses dari kode otorisasi
+        const tokenResponse = await client.getToken({ code });
+        const { id_token } = tokenResponse.tokens;
+  
+        // Verifikasi token ID Google menggunakan Firebase Authentication
+        const ticket = await client.verifyIdToken({
+          idToken: id_token,
+          audience: '985911723534-nt20v2sijh9s2e9qnbjfv36dpgkh9q5c.apps.googleusercontent.com', // Ganti dengan ID Klien Google Anda
+        });
+  
+        const payload = ticket.getPayload();
+        const googleUserId = payload['sub']; // ID unik pengguna Google
+  
+        // Lakukan login dengan menggunakan googleUserId, misalnya menyimpan ke Firebase Authentication
+        // Anda dapat menggabungkannya dengan logika login yang ada di aplikasi Anda
+  
+        return h.response({ success: true, message: 'Login dengan Google berhasil' }).code(200);
+      } catch (error) {
+        console.error('Error during Google login:', error.message);
+        return h.response({ success: false, message: 'Login dengan Google gagal' }).code(401);
+      }
+    },
+  });
+
 
   server.route({
     method: '*',
