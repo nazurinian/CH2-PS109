@@ -7,13 +7,13 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:3000/signup",
+			"name": "http://localhost:5000/signup",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nama\":\"Annisa\",\r\n    \"email\":\"nama123@gmail.com\",\r\n    \"username\":\"annisapp\",\r\n    \"Password\":\"1234567\",\r\n    \"Konfirmasi Password\":\"1234567\"\r\n}",
+					"raw": "{\r\n    \"nama\":\"Annisa\",\r\n    \"email\":\"annisapp600@gmail.com\",\r\n    \"username\":\"annisapp\",\r\n    \"password\":\"12345678\",\r\n    \"confirmPassword\":\"12345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,12 +21,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/signup",
+					"raw": "http://localhost:5000/signup",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"signup"
 					]
@@ -35,13 +35,13 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/login",
+			"name": "https://soilink.et.r.appspot.com/login",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"nama123@gmail.com\",\r\n    \"password\":\"1234567\"\r\n}",
+					"raw": "{\r\n    \"email\":\"annisapp600@gmail.com\",\r\n    \"password\":\"12345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,12 +49,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/login",
+					"raw": "http://localhost:5000/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"login"
 					]
@@ -63,19 +63,143 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/login",
+			"name": "https://soilink.et.r.appspot.com/reset-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\":\"1702759553013-pcr9s6\",\r\n    \"newPassword\":\"annisa123\",\r\n    \"confirmNewPassword\":\"annisa123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://soilink.et.r.appspot.com/reset-password",
+					"protocol": "https",
+					"host": [
+						"soilink",
+						"et",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://soilink.et.r.appspot.com/forgot-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"annisapp600@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://soilink.et.r.appspot.com/forgot-password",
+					"protocol": "https",
+					"host": [
+						"soilink",
+						"et",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://soilink.et.r.appspot.com/reset-password?token=1702759353869-xvil55",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/login",
-					"protocol": "http",
+					"raw": "https://soilink.et.r.appspot.com/reset-password?token=1702759353869-xvil55",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"soilink",
+						"et",
+						"r",
+						"appspot",
+						"com"
 					],
-					"port": "3000",
 					"path": [
-						"login"
+						"reset-password"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "1702759353869-xvil55"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://soilink.et.r.appspot.com/login/google",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://soilink.et.r.appspot.com/login/google",
+					"protocol": "https",
+					"host": [
+						"soilink",
+						"et",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"login",
+						"google"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://soilink.et.r.appspot.com/login/google/callback?code=1702759353869-xvil55",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://soilink.et.r.appspot.com/login/google/callback?code=1702759353869-xvil55",
+					"protocol": "https",
+					"host": [
+						"soilink",
+						"et",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"login",
+						"google",
+						"callback"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "1702759353869-xvil55"
+						}
 					]
 				}
 			},
