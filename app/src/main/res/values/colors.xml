@@ -21,8 +21,8 @@
 
     <color name="md_theme_light_surface">#FCFDF7</color>
 <!--    <color name="md_theme_light_onSurface">#1D1B1E</color>-->
-    <color name="md_theme_light_surfaceVariant">#BF0E4B35</color>
-    <color name="md_theme_light_onSurfaceVariant">#BF0E4B35</color>
+    <color name="md_theme_light_surfaceVariant">#0E4B35</color>
+    <color name="md_theme_light_onSurfaceVariant">#0E4B35</color>
 <!--    <color name="md_theme_light_inverseSurface">#332F33</color>-->
 <!--    <color name="md_theme_light_inverseOnSurface">#F6EFF3</color>-->
 <!--    <color name="md_theme_light_inversePrimary">#E5B4FF</color>-->
@@ -54,8 +54,9 @@
 
     <color name="color_toolbar_bar">#BF0E4B35</color>
     <color name="color_status_bar">#BF0E4B35</color>
-    <color name="color_ellipse_shape">#BF0E4B35</color>
+    <color name="color_shape">#0E4B35</color>
     <color name="color_text_button">#FF2F71D4</color>
+    <color name="color_home_appbar_decor">#C3D2CD</color>
     <color name="color_edit_text_layout">#406B9B75</color>
     <color name="color_stroke_soil_list_card">#AAE2AF</color>
     <color name="color_bottombar">#16674A</color>

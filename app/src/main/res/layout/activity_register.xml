@@ -30,13 +30,14 @@
             android:layout_marginEnd="13dp"
             android:layout_marginBottom="13dp"
             android:paddingTop="100dp"
+            android:alpha="0.75"
             android:src="@drawable/ellipse"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/hello_sign"
             app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:alpha="100" />
+            tools:alpha="75" />
 
         <TextView
             android:id="@+id/hello_sign"

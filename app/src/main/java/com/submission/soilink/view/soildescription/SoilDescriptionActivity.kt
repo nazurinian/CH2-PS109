@@ -29,7 +29,7 @@ class SoilDescriptionActivity : AppCompatActivity() {
         data?.apply {
             binding.ivSoilDescription.setImageResource(soilImage)
             binding.tvTitle.text = resources.getString(R.string.soil_title, getString(soilTitle))
-            binding.tvDescription.text = "Masi Kosong woi"
+//            binding.tvDescription.text = "Masi Kosong woi"
         }
     }
 

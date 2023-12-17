@@ -7,11 +7,6 @@
     android:fitsSystemWindows="false"
     tools:context=".view.soildescription.SoilDescriptionActivity">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/soil_description_appbar" />
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -20,35 +15,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:contentDescription="Soil Description"
-            android:theme="@style/customTextColor"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:title="Soil Description"
-            app:titleCentered="true" />
+            android:alpha="0.75"
+            android:layout_height="200dp"
+            android:background="@drawable/soil_description_appbar"
+            app:contentScrim="@drawable/soil_description_appbar"
+            app:collapsedTitleGravity="center"
+            app:titleEnabled="false"
+            app:titleCollapseMode="fade"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:contentDescription="Soil Description"
+                android:theme="@style/customTextColor"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:title="Soil Description"
+                app:titleCentered="true" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:behavior_overlapTop="100dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="35dp" />
 
             <ImageView
                 android:id="@+id/iv_soil_description"
@@ -60,7 +62,7 @@
                 app:layout_constraintDimensionRatio="16:9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/guideline" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

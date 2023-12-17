@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="13dp"
+            android:alpha="0.75"
             android:paddingTop="100dp"
             android:src="@drawable/ellipse"
             app:layout_constraintBottom_toTopOf="parent"
@@ -36,7 +37,7 @@
             app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:alpha="100" />
+            tools:alpha="0.75" />
 
         <TextView
             android:id="@+id/welcome_login"
@@ -131,8 +132,8 @@
                 android:layout_marginEnd="32dp"
                 android:alpha="0"
                 android:contentDescription="@string/input_password"
-                app:endIconMode="password_toggle"
                 app:endIconContentDescription="@string/show_password"
+                app:endIconMode="password_toggle"
                 app:errorIconDrawable="@null"
                 app:helperText=" "
                 app:hintEnabled="false"
