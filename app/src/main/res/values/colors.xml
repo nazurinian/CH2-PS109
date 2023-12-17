@@ -63,4 +63,5 @@
     <color name="color_bottombar_item_title">#21F66A</color>
 
     <color name="ic_soilink_launcher_background">#FFFFFF</color>
+    <color name="color_button_no">#E1E1E1</color>
 </resources>

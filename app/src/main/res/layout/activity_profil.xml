@@ -26,12 +26,12 @@
             app:titleCentered="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:orientation="vertical"
-                android:layout_gravity="end|center"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
                 android:layout_marginEnd="8dp"
-                android:paddingBottom="8dp"
-                android:layout_height="wrap_content">
+                android:orientation="vertical"
+                android:paddingBottom="8dp">
 
                 <ImageButton
                     android:id="@+id/btn_logout"
@@ -57,17 +57,181 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/soil_system_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Halaman Profil sedang dikembangkan IRSYAD"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="26dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/box2"
+                android:layout_width="350dp"
+                android:layout_height="480dp"
+                android:layout_marginTop="38dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.50"
+                    android:background="@drawable/round_box"
+                    app:layout_constraintBottom_toBottomOf="@id/box2"
+                    app:layout_constraintEnd_toEndOf="@id/box2"
+                    app:layout_constraintStart_toStartOf="@id/box2"
+                    app:layout_constraintTop_toTopOf="@id/box2" />
+
+                <ImageView
+                    android:id="@+id/profile"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="50dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/senyum"
+                    app:layout_constraintEnd_toEndOf="@+id/box2"
+                    app:layout_constraintStart_toStartOf="@+id/box2"
+                    app:layout_constraintTop_toTopOf="@+id/box2" />
+
+                <TextView
+                    android:id="@+id/textBelowImage"
+                    style="@style/TextAppearance.Material3.TitleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/full_name"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/box2"
+                    app:layout_constraintStart_toStartOf="@+id/box2"
+                    app:layout_constraintTop_toBottomOf="@id/profile" />
+
+                <TextView
+                    android:id="@+id/textBottom"
+                    style="@style/TextAppearance.Material3.TitleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/email_address"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/box2"
+                    app:layout_constraintStart_toStartOf="@id/box2"
+                    app:layout_constraintTop_toBottomOf="@+id/textBelowImage" />
+
+                <Button
+                    android:id="@+id/changeName"
+                    android:layout_width="125dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/cn_name"
+                    android:text="@string/cn_name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="15dp"
+                    app:layout_constraintEnd_toStartOf="@+id/changePassword"
+                    app:layout_constraintStart_toStartOf="@+id/box2"
+                    app:layout_constraintTop_toBottomOf="@+id/textBottom" />
+
+                <Button
+                    android:id="@+id/changePassword"
+                    android:layout_width="125dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/cn_password"
+                    android:text="@string/cn_password"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="15dp"
+                    app:layout_constraintEnd_toEndOf="@id/box2"
+                    app:layout_constraintStart_toEndOf="@+id/changeName"
+                    app:layout_constraintTop_toBottomOf="@+id/textBottom" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textLeft"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/box2"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="34dp"
+                android:text="@string/recent_act"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@id/box2"
+                app:layout_constraintTop_toBottomOf="@+id/box2" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/box3"
+                android:layout_width="340dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textLeft">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.70"
+                    android:background="@drawable/round_box"
+                    android:backgroundTint="#0E4B35"
+                    app:layout_constraintBottom_toBottomOf="@id/box3"
+                    app:layout_constraintEnd_toEndOf="@id/box3"
+                    app:layout_constraintStart_toStartOf="@id/box3" />
+
+                <ImageView
+                    android:id="@+id/recent"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="18dp"
+                    android:src="@drawable/soil"
+                    app:layout_constraintBottom_toBottomOf="@id/box3"
+                    app:layout_constraintStart_toStartOf="@+id/box3"
+                    app:layout_constraintTop_toTopOf="@+id/box3" />
+
+                <TextView
+                    android:id="@+id/typeSoil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/type_soil"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:theme="@style/customTextColor"
+                    app:layout_constraintStart_toEndOf="@id/recent"
+                    app:layout_constraintTop_toTopOf="@+id/recent" />
+
+                <TextView
+                    android:id="@+id/dateRecent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/date_recent"
+                    android:textSize="16sp"
+                    android:theme="@style/customTextColor"
+                    app:layout_constraintStart_toEndOf="@+id/recent"
+                    app:layout_constraintTop_toBottomOf="@+id/typeSoil" />
+
+                <TextView
+                    android:id="@+id/timeRecent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/time_recent"
+                    android:textSize="16sp"
+                    android:theme="@style/customTextColor"
+                    app:layout_constraintStart_toEndOf="@+id/recent"
+                    app:layout_constraintTop_toBottomOf="@+id/dateRecent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
