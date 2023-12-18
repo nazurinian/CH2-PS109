@@ -1,19 +1,16 @@
-package com.submission.soilink
+package com.submission.soilink.view.profile
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
+import com.submission.soilink.R
 import com.submission.soilink.util.showToast
-import com.submission.soilink.view.customview.CustomEditTextView
 
 class ChangePasswordFragment : DialogFragment() {
 

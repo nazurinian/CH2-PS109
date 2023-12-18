@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.submission.soilink.ChangeNameFragment
-import com.submission.soilink.ChangePasswordFragment
 import com.submission.soilink.databinding.ActivityProfilBinding
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
