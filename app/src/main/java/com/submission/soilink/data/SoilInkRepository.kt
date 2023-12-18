@@ -30,10 +30,11 @@ class SoilInkRepository private constructor(
     fun register(registerData: LoginRegistrationModel) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.register(
+            val successResponse = apiService.signup(
                 registerData.name!!,
                 registerData.email,
-                registerData.password
+                registerData.password,
+                registerData.confirmPassword!!
             )
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {

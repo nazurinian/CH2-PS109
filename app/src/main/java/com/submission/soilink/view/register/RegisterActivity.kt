@@ -123,8 +123,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (confirmPassword != password) {
                     showToast(this, "Password tidak sesuai")
                 } else {
-                    val dataUser =
-                        LoginRegistrationModel(name.toString(), email.toString(), password.toString())
+                    val dataUser = LoginRegistrationModel(name.toString(), email.toString(), password.toString(), confirmPassword.toString())
                     viewModel.startRegistration(dataUser).observe(this) { result ->
                         if (result != null) {
                             when (result) {
@@ -137,7 +136,8 @@ class RegisterActivity : AppCompatActivity() {
                                 }
 
                                 is ResultState.Success -> {
-                                    viewModel.startLogin(dataUser).observe(this) { result ->
+                                    val dataLogin = LoginRegistrationModel(email = email.toString(), password = password.toString())
+                                    viewModel.startLogin(dataLogin).observe(this) { result ->
                                         if (result != null) {
                                             when (result) {
                                                 is ResultState.Loading -> {
@@ -152,12 +152,12 @@ class RegisterActivity : AppCompatActivity() {
                                                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                                                     showLoading(false)
 
-                                                    val dataResult = result.data.loginResult
+                                                    val dataResult = result.data.user
                                                     viewModel.saveSession(
                                                         UserModel(
-                                                            dataResult?.name.toString(),
+                                                            dataResult?.displayName.toString(),
                                                             email.toString(),
-//                                                        dataResult?.token.toString()
+                                                            dataResult?.uid.toString(),
                                                         )
                                                     )
 

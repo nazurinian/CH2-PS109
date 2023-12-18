@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAction() {
-        val user = "Ilham Dhani"
+        val user = activity?.intent?.getStringExtra(USER_NAME)
         val toolbar = binding.topAppBar
         toolbar.title = activity?.getString(R.string.user_login, user)
 

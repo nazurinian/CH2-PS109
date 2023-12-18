@@ -2,22 +2,27 @@ package com.submission.soilink.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.submission.soilink.view.home.HomeFragment.Companion.USER_NAME
 import com.submission.soilink.R
+import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.model.LoginRegistrationModel
 import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.databinding.ActivityLoginBinding
+import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.forgotpassword.ForgotPasswordActivity
 import com.submission.soilink.view.home.HomeActivity
@@ -88,38 +93,83 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginButton.setOnClickListener {
-            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
-                val dataUser = LoginRegistrationModel("", email.toString(), password.toString())
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(binding.loginButton.windowToken, 0)
 
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                viewModel.saveSession(
-                    UserModel(
-                        "",
-                        email.toString(),
-//                                        dataResult?.token.toString()
-                    )
-                )
-                AlertDialog.Builder(this).apply {
+            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                val dataUser = LoginRegistrationModel(email = email.toString(), password = password.toString())
+
+                viewModel.startLogin(dataUser).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                                window.setFlags(
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                                )
+                            }
+
+                            is ResultState.Success -> {
+                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                showLoading(false)
+
+                                val dataResult = result.data.user
+                                viewModel.saveSession(
+                                    UserModel(
+                                        dataResult?.displayName.toString(),
+                                        email.toString(),
+                                        dataResult?.uid.toString(),
+                                    )
+                                )
+
+                                Log.d("njirr", dataResult.toString())
+
+                                AlertDialog.Builder(this).apply {
 //                                    setTitle(getString(R.string.info_login_alert))
-                    setTitle("Selamat...")
+                                    setTitle("Selamat...")
 //                                    setMessage(getString(R.string.login_message))
-                    setMessage("Login berhasil dilakukan dengan menggunakan email: $email")
-                    setCancelable(false)
-                    setPositiveButton(getString(R.string.login)) { _, _ ->
-                        val intentToHome = Intent(context, HomeActivity::class.java)
-                        intentToHome.flags =
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        intentToHome.putExtra(
-                            USER_NAME,
-                            email.toString()
-//                            dataResult?.name.toString()
-                        )
-                        startActivity(intentToHome)
-                        finish()
+                                    setMessage("Login berhasil dilakukan dengan menggunakan email: $email")
+                                    setCancelable(false)
+                                    setPositiveButton(getString(R.string.login)) { _, _ ->
+                                        val intentToHome = Intent(context, HomeActivity::class.java)
+                                        intentToHome.flags =
+                                            Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                        intentToHome.putExtra(
+                                            USER_NAME,
+                                            dataResult?.displayName.toString()
+                                        )
+                                        startActivity(intentToHome)
+                                        finish()
+                                    }
+                                    create()
+                                    show()
+                                }
+                            }
+
+                            is ResultState.Error -> {
+                                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                if (result.error.contains("email")) {
+                                    emailLayout.error = getString(R.string.email_pattern)
+                                } else {
+                                    showToast(this, result.error)
+                                }
+                                showLoading(false)
+                            }
+                        }
+
                     }
-                    create()
-                    show()
                 }
+
+                /*                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                                viewModel.saveSession(
+                                    UserModel(
+                                        "",
+                                        email.toString(),
+                //                                        dataResult?.token.toString()
+                                    )
+                                )*/
             } else {
                 if (emailField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)

@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         //link API
-        buildConfigField("String", "BASE_URL", "\"https://www.google.com/\"")
+        buildConfigField("String", "BASE_URL", "\"https://soilink.et.r.appspot.com/\"")
     }
 
     buildTypes {

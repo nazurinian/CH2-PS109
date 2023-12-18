@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Soil Ink</string>
+    <string name="app_name">SoilInk</string>
     <string name="title_home_activity">HomeActivity</string>
     <string name="title_register_activity">RegisterActivity</string>
     <string name="title_login_activity">LoginActivity</string>
@@ -62,6 +62,7 @@
     <string name="time_recent">13.41 WIB</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_pattern">Please enter the email address in the correct format</string>
 
 
 </resources>
