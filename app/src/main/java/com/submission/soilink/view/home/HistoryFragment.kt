@@ -1,13 +1,20 @@
 package com.submission.soilink.view.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.submission.soilink.data.SoilListData
 import com.submission.soilink.databinding.FragmentHistoryBinding
 import com.submission.soilink.view.ViewModelFactory
+import com.submission.soilink.view.detailhistory.DetailHistoryActivity
+import com.submission.soilink.view.soildescription.SoilDescriptionActivity
+import com.submission.soilink.view.soillist.SoilListAdapter
 
 class HistoryFragment : Fragment() {
 
@@ -21,9 +28,44 @@ class HistoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(itemView, savedInstanceState)
+
+        setupAction()
+        showSoilList()
+    }
+
+    private fun setupAction() {}
+
+    private fun showSoilList() {
+        val layoutManager = LinearLayoutManager(activity)
+        val historyAdapter = binding.rvHistoryList
+        historyAdapter.layoutManager  = layoutManager
+
+        val adapter = HistoryAdapter { soil ->
+            val detailIntent = Intent(activity, DetailHistoryActivity::class.java)
+            detailIntent.putExtra(DetailHistoryActivity.HISTORY, soil)
+            startActivity(detailIntent)
+        }
+
+        historyAdapter.adapter = adapter
+
+        adapter.submitList(SoilListData().soilList())
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {}
 }

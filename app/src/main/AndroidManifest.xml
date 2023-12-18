@@ -21,6 +21,9 @@
         android:theme="@style/Theme.SoilInk"
         tools:targetApi="31">
         <activity
+            android:name=".view.result.ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.soildescription.SoilDescriptionActivity"
             android:exported="false"
             android:parentActivityName=".view.soillist.SoilListActivity" />

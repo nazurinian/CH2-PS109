@@ -9,4 +9,8 @@ class DetailHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_history)
     }
+
+    companion object {
+        const val HISTORY = "HISTORY"
+    }
 }

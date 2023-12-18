@@ -62,6 +62,7 @@
         android:layout_height="0dp"
         android:paddingBottom="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
@@ -98,7 +99,8 @@
                     android:src="@drawable/senyum"
                     app:layout_constraintEnd_toEndOf="@+id/box2"
                     app:layout_constraintStart_toStartOf="@+id/box2"
-                    app:layout_constraintTop_toTopOf="@+id/box2" />
+                    app:layout_constraintTop_toTopOf="@+id/box2"
+                    tools:src="@tools:sample/avatars[4]" />
 
                 <TextView
                     android:id="@+id/textBelowImage"

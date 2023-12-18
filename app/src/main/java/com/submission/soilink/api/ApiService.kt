@@ -14,7 +14,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("signup")
     suspend fun signup(
-        @Field("name") name: String,
+        @Field("nama") name: String,
         @Field("email") email: String,
         @Field("password") password: String,
         @Field("confirmPassword") confirmPassword: String
