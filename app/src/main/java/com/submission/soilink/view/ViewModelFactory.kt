@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.submission.soilink.data.SoilInkRepository
 import com.submission.soilink.di.Injection
+import com.submission.soilink.view.forgotpassword.ForgetPasswordModel
 import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.login.LoginViewModel
 import com.submission.soilink.view.profile.ProfileViewModel
@@ -30,6 +31,10 @@ class ViewModelFactory(private val repository: SoilInkRepository) :
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(ForgetPasswordModel::class.java) -> {
+                ForgetPasswordModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

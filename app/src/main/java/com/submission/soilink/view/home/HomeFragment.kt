@@ -43,18 +43,18 @@ class HomeFragment : Fragment() {
         val user = runBlocking { pref.getSession().first() }
 //        ApiConfig.token = user.token
 
-        setupAction()
+        setupAction(user.name)
 //        binding.thisUser.text = requireActivity().getString(R.string.hallo_user, user.name)
     }
 
-    private fun setupAction() {
-        val user = activity?.intent?.getStringExtra(USER_NAME)
+    private fun setupAction(userName: String) {
+//        val user = activity?.intent?.getStringExtra(USER_NAME)
         val toolbar = binding.topAppBar
-        toolbar.title = activity?.getString(R.string.user_login, user)
+        toolbar.title = activity?.getString(R.string.user_login, userName)
 
         binding.btnProfile.setOnClickListener {
             val intent = Intent(activity,  ProfileActivity::class.java)
-            intent.putExtra(ProfileActivity.DATA_PROFILE, user)
+            intent.putExtra(ProfileActivity.DATA_PROFILE, userName)
             startActivity(intent)
         }
 

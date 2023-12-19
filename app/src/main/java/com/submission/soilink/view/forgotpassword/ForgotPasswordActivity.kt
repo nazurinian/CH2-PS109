@@ -13,7 +13,10 @@ import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
+import com.submission.soilink.R
+import com.submission.soilink.data.ResultState
 import com.submission.soilink.databinding.ActivityForgotPasswordBinding
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
@@ -21,7 +24,7 @@ import com.submission.soilink.view.login.LoginActivity
 import com.submission.soilink.view.login.LoginViewModel
 
 class ForgotPasswordActivity : AppCompatActivity() {
-    private val viewModel by viewModels<LoginViewModel> {
+    private val viewModel by viewModels<ForgetPasswordModel> {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityForgotPasswordBinding
@@ -72,24 +75,57 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 //email yg mau direset paswordnya
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                showToast(this, "Fitur reset password sedang dalam masa pengembangan")
-/*                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                AlertDialog.Builder(this).apply {
-//                                    setTitle(getString(R.string.info_login_alert))
-                    setTitle("Informasi")
-//                                    setMessage(getString(R.string.login_message))
-                    setMessage("Link reset password berhasil dikirimkan, silahkan cek kotak masuk email anda.")
-                    setCancelable(false)
-                    setPositiveButton(getString(R.string.login)) { _, _ ->
-                        val intentToLogin = Intent(context, LoginActivity::class.java)
-                        intentToLogin.flags =
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        startActivity(intentToLogin)
-                        finish()
+//                showToast(this, "Fitur reset password sedang dalam masa pengembangan")
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
+                viewModel.sendLinkResetPassword(email.toString()).observe(this) { result ->
+                    when (result) {
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                            window.setFlags(
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                            )
+                        }
+
+                        is ResultState.Success -> {
+                            showLoading(false)
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                            showToast(
+                                this,
+                                "Link reset password berhasil dikirimkan, silahkan cek kotak masuk email anda."
+                            )
+
+                            val intentToLogin = Intent(this, LoginActivity::class.java)
+                            intentToLogin.flags =
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intentToLogin)
+                            finish()
+//                            AlertDialog.Builder(this).apply {
+//                                // setTitle(getString(R.string.info_login_alert))
+//                                // setMessage(getString(R.string.login_message))
+//                                setTitle("Informasi")
+//                                setMessage("Link reset password berhasil dikirimkan, silahkan cek kotak masuk email anda.")
+//                                setCancelable(false)
+//                                setPositiveButton(getString(R.string.login)) { _, _ ->
+//                                    val intentToLogin = Intent(context, LoginActivity::class.java)
+//                                    intentToLogin.flags =
+//                                        Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                                    startActivity(intentToLogin)
+//                                    finish()
+//                                }
+//                                create()
+//                                show()
+//                            }
+                        }
+
+                        is ResultState.Error -> {
+                            showLoading(false)
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                            showToast(this, result.error)
+                        }
                     }
-                    create()
-                    show()
-                }*/
+                }
             } else {
                 if (emailField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
@@ -123,7 +159,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         val emailEdit =
             ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(250)
-        val resetButton = ObjectAnimator.ofFloat(binding.resetButton, View.ALPHA, 1f).setDuration(250)
+        val resetButton =
+            ObjectAnimator.ofFloat(binding.resetButton, View.ALPHA, 1f).setDuration(250)
 
         val haveAccount =
             ObjectAnimator.ofFloat(binding.haveAccount, View.ALPHA, 1f).setDuration(250)

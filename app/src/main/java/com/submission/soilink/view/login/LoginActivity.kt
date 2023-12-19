@@ -158,18 +158,8 @@ class LoginActivity : AppCompatActivity() {
                                 showLoading(false)
                             }
                         }
-
                     }
                 }
-
-                /*                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                viewModel.saveSession(
-                                    UserModel(
-                                        "",
-                                        email.toString(),
-                //                                        dataResult?.token.toString()
-                                    )
-                                )*/
             } else {
                 if (emailField.text.toString().isEmpty()) {
 //                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
