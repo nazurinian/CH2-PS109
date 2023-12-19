@@ -59,6 +59,18 @@ class SoilInkRepository private constructor(
         }
     }
 
+    fun profile(email: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.profile(email)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: SoilInkRepository? = null

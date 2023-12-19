@@ -14,7 +14,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("signup")
     suspend fun signup(
-        @Field("nama") name: String,
+        @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String,
         @Field("confirmPassword") confirmPassword: String
@@ -27,4 +27,15 @@ interface ApiService {
         @Field("password") password: String
     ): LoginResponse
 
+    @FormUrlEncoded
+    @POST("profile")
+    suspend fun profile(
+        @Field("email") email: String
+    ): LoginResponse
+
+    @FormUrlEncoded
+    @POST("forgot-password")
+    suspend fun resetPassword(
+        @Field("email") email: String
+    ): ErrorResponse
 }

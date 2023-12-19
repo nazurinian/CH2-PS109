@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".view.profile.ProfileActivity">
 
+    <ProgressBar
+        android:id="@+id/progressIndicator"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -58,13 +69,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/detail_profile"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:alpha="0"
         android:paddingBottom="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        tools:visibility="visible"
+        tools:alpha="100">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -90,17 +106,15 @@
                     app:layout_constraintStart_toStartOf="@id/box2"
                     app:layout_constraintTop_toTopOf="@id/box2" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:layout_marginTop="50dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/senyum"
+                    android:src="@drawable/avatar_male"
                     app:layout_constraintEnd_toEndOf="@+id/box2"
                     app:layout_constraintStart_toStartOf="@+id/box2"
-                    app:layout_constraintTop_toTopOf="@+id/box2"
-                    tools:src="@tools:sample/avatars[4]" />
+                    app:layout_constraintTop_toTopOf="@+id/box2" />
 
                 <TextView
                     android:id="@+id/textBelowImage"
