@@ -1,11 +1,13 @@
 package com.submission.soilink.view.detailhistory
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import com.submission.soilink.R
+import androidx.appcompat.app.AppCompatActivity
 import com.submission.soilink.databinding.ActivityDetailHistoryBinding
-import com.submission.soilink.util.showToast
+
 
 class DetailHistoryActivity : AppCompatActivity() {
 
@@ -25,6 +27,28 @@ class DetailHistoryActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+        }
+
+        binding.share.setOnClickListener {
+            //contoh share ke wa
+            val phoneNumber = "1234567890"
+            val message = "Details history"
+            val whatsappLink = "https://api.whatsapp.com/send?phone=${phoneNumber}&amp;text=${message}"
+//            val whatsappLink = getString(R.string.whatsapp_link, phoneNumber, message)
+
+            val uri = Uri.parse(whatsappLink)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+
+            //contoh share ke pesan pokoknya
+//            val sendIntent = Intent().apply {
+//                action = Intent.ACTION_SEND
+//                type = "text/plain"
+//                putExtra(Intent.EXTRA_TEXT, message)
+//            }
+//
+//            val chooser = Intent.createChooser(sendIntent, title)
+//            startActivity(chooser)
         }
     }
 
