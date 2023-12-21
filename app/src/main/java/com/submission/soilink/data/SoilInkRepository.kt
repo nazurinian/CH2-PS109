@@ -8,7 +8,12 @@ import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.data.pref.UserPreference
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
+import java.io.File
 
 class SoilInkRepository private constructor(
     private val userPreference: UserPreference,
@@ -82,6 +87,30 @@ class SoilInkRepository private constructor(
             emit(ResultState.Error(errorResponse.message))
         }
     }
+
+    fun uploadImage(picture: File) = liveData {
+        emit(ResultState.Loading)
+//        val requestStoryDescription = description.toRequestBody("text/plain".toMediaType())
+        val requestStoryImageFile = picture.asRequestBody("image/*".toMediaType())
+
+        val multipartBody = MultipartBody.Part.createFormData(
+            "file",
+            picture.name,
+            requestStoryImageFile
+        )
+        try {
+            val successResponse = apiService.uploadImage(
+//                requestStoryDescription,
+                multipartBody
+            )
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
 
     companion object {
         @Volatile

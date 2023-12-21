@@ -71,8 +71,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_result"
-                tools:targetApi="o" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_result" />
 
             <View
                 android:id="@+id/view2"
@@ -106,8 +105,7 @@
                     android:justificationMode="inter_word"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
                     android:textAlignment="center"
-                    android:textSize="14sp"
-                    tools:targetApi="o" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <Button

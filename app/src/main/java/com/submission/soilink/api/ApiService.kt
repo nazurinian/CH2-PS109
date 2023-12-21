@@ -38,4 +38,10 @@ interface ApiService {
     suspend fun resetPassword(
         @Field("email") email: String
     ): ErrorResponse
+
+    @Multipart
+    @POST("upload")
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part,
+    ): ErrorResponse
 }
