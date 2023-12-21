@@ -1,15 +1,14 @@
 package com.submission.soilink.util
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.camera.core.ImageCapture
 import androidx.exifinterface.media.ExifInterface
@@ -23,7 +22,6 @@ import java.util.Date
 import java.util.Locale
 
 private const val FORMAT_NAME = "yyyyMMdd_HHmmss"
-//private val timeStamp: String = SimpleDateFormat(FORMAT_NAME, Locale.US).format(Date())
 private const val MAXIMAL_SIZE = 1000000
 var accountName: String? = null
 
@@ -31,14 +29,20 @@ fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-fun generateFileName(accountName: String?): String {
+fun generateFileName(accountName: String? = null): String {
     val dateFormat = SimpleDateFormat(FORMAT_NAME, Locale.getDefault())
     val currentDateAndTime: String = dateFormat.format(Date())
 
     val firstChar = accountName?.firstOrNull() ?: 'x'
     val lastChar = accountName?.lastOrNull() ?: 'x'
 
-    return currentDateAndTime + "_$firstChar$lastChar"
+    val fileName = if (accountName != null) {
+        currentDateAndTime + "_$firstChar$lastChar"
+    } else {
+        currentDateAndTime
+    }
+
+    return fileName
 }
 
 fun getCurrentDate(): String {
@@ -51,33 +55,30 @@ fun createCustomTempFile(context: Context): ImageCapture.OutputFileOptions.Build
     val resolver = context.contentResolver
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        put(MediaStore.Images.Media.DISPLAY_NAME, generateFileName(accountName))
-        put(MediaStore.Images.Media.DATE_TAKEN, generateFileName(accountName))
-        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Soilink")
+        put(MediaStore.Images.Media.DISPLAY_NAME, generateFileName())
+        put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
     }
-    return ImageCapture.OutputFileOptions.Builder(
-        resolver,
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        contentValues
-    )
-}
 
-@SuppressLint("Range")
-fun getFileNameFromUri(uri: Uri, context: Context): String? {
-    var fileName: String? = null
-    val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
-    cursor?.use {
-        it.moveToFirst()
-        fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+    val relativePath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Soilink")
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    } else {
+        val externalStorageDirectory = Environment.getExternalStorageDirectory()
+        val directory = File(externalStorageDirectory, "Pictures/Soilink")
+        val file = File(directory, generateFileName(accountName) + ".jpg")
+
+        return ImageCapture.OutputFileOptions.Builder(file)
+            .setMetadata(ImageCapture.Metadata().apply {
+                isReversedHorizontal = false
+                isReversedVertical = false
+            })
     }
-    return fileName
+
+    return ImageCapture.OutputFileOptions.Builder(resolver, relativePath, contentValues)
 }
 
 fun uriToFile(imageUri: Uri, context: Context): File {
-//    val myFile = File(context.externalMediaDirs.first(), "my_temp_image.jpg")
-    val fileName: String? = getFileNameFromUri(imageUri, context)
-    val myFile = File(context.externalMediaDirs.first(), fileName ?: "my_temp_image.jpg")
-
+    val myFile = File(context.externalMediaDirs.first(), generateFileName(accountName) + ".jpg")
     val inputStream = context.contentResolver.openInputStream(imageUri) as InputStream
     val outputStream = FileOutputStream(myFile)
     val buffer = ByteArray(1024)

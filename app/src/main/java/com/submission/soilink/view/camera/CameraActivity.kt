@@ -33,8 +33,7 @@ import com.submission.soilink.view.result.ResultActivity.Companion.EXTRA_IMAGE_U
 
 /**
  * 1. get Lokasi
- * #2. get Tanggal (diutils ya)
- * 3. setup list soil
+ * 2. setup list soil
  * 3. setup home information ntr bisa di expand
  * */
 class CameraActivity : AppCompatActivity() {
@@ -165,8 +164,8 @@ class CameraActivity : AppCompatActivity() {
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val outputOptions = createCustomTempFile(this).build()
-        unBindCamera()
         showLoading(true)
+        unBindCamera()
 
         AlertDialog.Builder(this).apply {
             setTitle("Cek tipe tanah?")
@@ -180,6 +179,7 @@ class CameraActivity : AppCompatActivity() {
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             output.savedUri?.let { uri ->
+                                showToast(context, uri.toString())
                                 val imageFile = uriToFile(uri, context).reduceFileImage()
 
                                 viewModel.uploadPicture(imageFile)
@@ -206,6 +206,7 @@ class CameraActivity : AppCompatActivity() {
                                                 }
 
                                                 is ResultState.Error -> {
+                                                    bindCamera()
                                                     showToast(context, result.error)
                                                     showLoading(false)
                                                 }
@@ -217,6 +218,8 @@ class CameraActivity : AppCompatActivity() {
                         }
 
                         override fun onError(exc: ImageCaptureException) {
+                            bindCamera()
+                            showLoading(false)
                             showToast(context, "Gagal mengambil gambar.")
                         }
                     }

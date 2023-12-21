@@ -89,7 +89,6 @@ class HomeFragment : Fragment() {
         binding.btnAboutSoilInk.setOnClickListener {
             val intent = Intent(activity, AboutActivity::class.java)
             startActivity(intent)
-            showToast(requireContext(), getCurrentDate())
         }
     }
 
@@ -102,35 +101,11 @@ class HomeFragment : Fragment() {
     ) { uri: Uri? ->
         if (uri != null) {
             showToast(requireContext(), "Telah memilih gambar")
-            val fileName = getRealPathFromDocumentUri(requireContext(), uri)
-            val fileNames = fileName.let { Uri.parse(it) }
-            currentImageUri = fileNames!!
+            currentImageUri = uri
             processImage()
         } else {
             showToast(requireContext(), "Tidak ada gambar yang dipilih")
         }
-    }
-
-    private fun getRealPathFromDocumentUri(context: Context, uri: Uri): String {
-        var filePath = ""
-        val p: Pattern = Pattern.compile("(\\d+)$")
-        val m: Matcher = p.matcher(uri.toString())
-        if (!m.find()) {
-            return filePath
-        }
-        val imgId = m.group()
-        val column = arrayOf(MediaStore.Images.Media.DATA)
-        val sel = MediaStore.Images.Media._ID + "=?"
-        val cursor = context.contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            column, sel, arrayOf(imgId), null
-        )
-        val columnIndex = cursor!!.getColumnIndex(column[0])
-        if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex)
-        }
-        cursor.close()
-        return filePath
     }
 
     private fun processImage() {
