@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
 
@@ -90,7 +89,6 @@ class SoilInkRepository private constructor(
 
     fun uploadImage(picture: File) = liveData {
         emit(ResultState.Loading)
-//        val requestStoryDescription = description.toRequestBody("text/plain".toMediaType())
         val requestStoryImageFile = picture.asRequestBody("image/*".toMediaType())
 
         val multipartBody = MultipartBody.Part.createFormData(
@@ -100,7 +98,6 @@ class SoilInkRepository private constructor(
         )
         try {
             val successResponse = apiService.uploadImage(
-//                requestStoryDescription,
                 multipartBody
             )
             emit(ResultState.Success(successResponse))

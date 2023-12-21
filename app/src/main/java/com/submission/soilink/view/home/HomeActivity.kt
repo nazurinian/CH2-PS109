@@ -83,7 +83,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     companion object {
-//        const val EXTRA_IMAGE_CAMERA_URI = "EXTRA_IMAGE_CAMERA_URI"
         const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }

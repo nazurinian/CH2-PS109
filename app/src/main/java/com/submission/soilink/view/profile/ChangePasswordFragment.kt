@@ -16,9 +16,7 @@ class ChangePasswordFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            // Handle arguments if needed
-        }
+        arguments?.let {}
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -33,40 +31,31 @@ class ChangePasswordFragment : DialogFragment() {
         val btnYes = view.findViewById<Button>(R.id.btn_yes)
         val btnNo = view.findViewById<Button>(R.id.btn_no)
 
-        // Customize the dialog as needed, set title, buttons, etc.
         builder.setView(view)
 
-        // Set OnClickListener for "Yes" button
         btnYes.setOnClickListener {
             val enteredPassword = changePasswordText.text.toString()
             val enteredConfirmPassword = changeConfirmPasswordText.text.toString()
 
-            // Reset errors
             changePasswordTextLayout.error = null
             changeConfirmPasswordTextLayout.error = null
 
             if (enteredPassword.length < 8 || enteredConfirmPassword.length < 8) {
-                // Display error message for minimum length
                 if (enteredPassword.length < 8) {
-                    changePasswordTextLayout.error = "Password must be at least 8 characters"
+                    changePasswordTextLayout.error = getString(R.string.error_password_too_short)
                 }
                 if (enteredConfirmPassword.length < 8) {
-                    changeConfirmPasswordTextLayout.error = "Password must be at least 8 characters"
+                    changeConfirmPasswordTextLayout.error = getString(R.string.error_confirmation_password_too_short)
                 }
             } else if (enteredPassword != enteredConfirmPassword) {
-                // Display error message for mismatched passwords
-                changeConfirmPasswordTextLayout.error = "Passwords do not match"
+                changeConfirmPasswordTextLayout.error = getString(R.string.password_mismatch)
             } else {
-                showToast(requireContext(), "Password berhasil diganti")
-                // Perform other actions related to password change
+                showToast(requireContext(), getString(R.string.success_change_password))
                 dismiss()
             }
         }
 
-        // Set OnClickListener for "No" button
         btnNo.setOnClickListener {
-            // Handle negative button click
-            // Dismiss the dialog or perform other actions
             dismiss()
         }
 

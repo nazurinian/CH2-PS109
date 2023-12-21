@@ -4,10 +4,10 @@
     <string name="title_register_activity">RegisterActivity</string>
     <string name="title_login_activity">LoginActivity</string>
     <string name="title_splashscreen_activity">SplashscreenActivity</string>
-    <string name="soil_ink_image">Soil ink image</string>
-    <string name="input_name">Input name</string>
-    <string name="input_email">Input email</string>
-    <string name="input_password">Input password</string>
+    <string name="soil_ink_image">Soil Ink Image</string>
+    <string name="input_name">Input Name</string>
+    <string name="input_email">Input Email</string>
+    <string name="input_password">Input Password</string>
     <string name="name">Full Name</string>
     <string name="email">Email Address</string>
     <string name="password">Password</string>
@@ -15,8 +15,8 @@
     <string name="signup_info">Sign Up!</string>
     <string name="login">Log In</string>
     <string name="login_info">Log In!</string>
-    <string name="login_button">Login button</string>
-    <string name="signup_button">Sign up button</string>
+    <string name="login_button">Login Button</string>
+    <string name="signup_button">Sign Up Button</string>
     <string name="question_have_account">Don\'t have an account?\u0020</string>
     <string name="have_account">Already have an account?\u0020</string>
     <string name="to_page_signup"><u>Sign Up</u></string>
@@ -25,19 +25,18 @@
     <string name="tb_login">Log In Button</string>
     <string name="logout">Log Out</string>
     <string name="reset_password_page">Forgot Password?</string>
-    <string name="hallo_user">"Halo kak %s"</string>
-    <string name="welcome_user">"Selamat datang diaplikasi SoilInk"</string>
+    <string name="hallo_user">"Hello, %s"</string>
+    <string name="welcome_user">"Welcome to the SoilInk application"</string>
     <string name="welcome_login">Welcome Back,</string>
     <string name="hello_sign">Hello,</string>
     <string name="show_password">Show Password</string>
 
-
     <string name="soil_inceptisol">Inceptisol</string>
     <string name="soil_kapur">Kapur</string>
-    <string name="soil_pasir">Pasir</string>
-    <string name="soil_laterit">Laterit</string>
+    <string name="soil_pasir">Sand</string>
+    <string name="soil_laterit">Laterite</string>
     <string name="soil_humus">Humus</string>
-    <string name="soil_aluvial">Aluvial</string>
+    <string name="soil_aluvial">Alluvial</string>
     <string name="soil_andosol">Andosol</string>
     <string name="soil_entisol">Entisol</string>
     <string name="login_trouble">Trouble logging in?</string>
@@ -49,7 +48,7 @@
     <string name="profile">Profile</string>
     <string name="title_history">History</string>
     <string name="title_home">Home</string>
-    <string name="soil_title">Tanah %s</string>
+    <string name="soil_title">Soil %s</string>
 
     <string name="full_name">Full Name</string>
     <string name="email_address">emailaddress@gmail.com</string>
@@ -58,13 +57,54 @@
     <string name="recent_act">Recent Activity</string>
     <string name="view_all">View All > </string>
     <string name="type_soil">Type Of Soil</string>
-    <string name="date_recent">24, Januari 2024</string>
-    <string name="time_recent">13.41 WIB</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_recent">January 24, 2024</string>
+    <string name="time_recent">13:41 WIB</string>
+
     <string name="email_pattern">Please enter the email address in the correct format</string>
     <string name="no_internet_connection">No internet connection.\nPlease check your connection.</string>
     <string name="post_successfull">Post successfully uploaded</string>
-
-
+    <string name="select_image">Choose an Image</string>
+    <string name="deselect_image">No image selected</string>
+    <string name="check_soil_type">Check soil type?</string>
+    <string name="start_check">Starting soil type check process</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+    <string name="not_processing">Not processing</string>
+    <string name="get_image">Fetching image</string>
+    <string name="load_camera_failed">Failed to start camera</string>
+    <string name="failed_choose_image">Failed to choose image.</string> // ini ya
+    <string name="error_email_too_short">Email minimum 6 characters</string>
+    <string name="error_email_is_empty">Email cannot be empty</string>
+    <string name="success_send_link">Password reset link successfully sent, please check your email inbox.</string>
+    <string name="error_name_too_short">Name minimum 3 characters</string>
+    <string name="error_password_too_short">Password minimum 8 characters</string>
+    <string name="error_confirmation_password_too_short">Confirmation password minimum 8 characters</string>
+    <string name="info_login_registration_alert">Congratulations...</string>
+    <string name="register_message">Account with email: %1$s created successfully</string>
+    <string name="error_password_is_empty">Password cannot be empty</string>
+    <string name="error_confirmation_password_is_empty">Confirmation password cannot be empty</string>
+    <string name="error_name_is_empty">Name cannot be empty</string>
+    <string name="password_mismatch">Passwords do not match</string>
+    <string name="login_message">Logged in successfully using email: %1$s</string>
+    <string name="success_change_name">Name Successfully Changed: %1$s</string>
+    <string name="success_change_password">Password changed successfully</string>
+    <string name="failed_capture_image">Failed to capture the image.</string>
+    <string name="about_soilink_1">Soilink hadir sebagai mitra Anda dalam merencanakan masa depan pembangunan yang berkelanjutan dan efisien. Mari bergabung bersama kami untuk membuat setiap proyek konstruksi menjadi sukses dengan pemilihan tanah yang tepat.</string>
+    <string name="about_soilink_2">Soilink bertujuan untuk memberikan bantuan berharga kepada masyarakat umum, pengembang properti, dan perencana kota. Kami tidak hanya menyediakan informasi detil tentang jenis tanah, tetapi juga berfokus pada cara efektif untuk mengenali tanah dengan akurasi tinggi. Melalui aplikasi ini, kami berkomitmen untuk meningkatkan keberlanjutan dan efisiensi dalam pengembangan daerah.</string>
+    <string name="about_info">Tujuan</string>
+    <string name="detail_history_page_title">Detail History</string>
+    <string name="share_history">Share history</string>
+    <string name="soil_list">Soil List</string>
+    <string name="find_your_soil">Let’s find your soil</string>
+    <string name="explore_soil_description">Explore various soil types and discover the perfect match for your needs. Click on each soil type to find detailed information.</string>
+    <string name="soil_description">Soil Description</string>
+    <string name="change_your_name">Change Your Name?</string>
+    <string name="enter_new_name">Enter New Name</string>
+    <string name="soil_picture">Soil picture</string>
+    <string name="welcome_soilink">Welcome to Soilink</string>
+    <string name="check_your_soil_type">Let’s check your soil type</string>
+    <string name="soil_system_menu">Soil system menu</string>
+    <string name="about_page">About</string>
+    <string name="soil_information">Soil information</string>
+    <string name="soil_information_desctiprion">Soil, the biologically active, porous medium that has developed in the uppermost layer of Earth’s crust. Soil is one of the principal substrata of life on Earth, serving as a reservoir of water and nutrients, as a medium for the filtration and breakdown of injurious wastes, and as a participant in the cycling of carbon and other elements through the global ecosystem. It has evolved through weathering processes driven by biological, climatic, geologic, and topographic influences.</string>
 </resources>

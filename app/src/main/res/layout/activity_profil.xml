@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center"
                     android:text="@string/logout"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/btn_logout"
                     app:layout_constraintStart_toStartOf="@+id/btn_logout" />

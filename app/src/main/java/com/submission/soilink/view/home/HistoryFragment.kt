@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.submission.soilink.data.SoilListData
 import com.submission.soilink.databinding.FragmentHistoryBinding
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.detailhistory.DetailHistoryActivity
-import com.submission.soilink.view.soildescription.SoilDescriptionActivity
-import com.submission.soilink.view.soillist.SoilListAdapter
+import com.submission.soilink.view.detailhistory.DetailHistoryActivity.Companion.HISTORY
 
 class HistoryFragment : Fragment() {
 
@@ -49,7 +47,7 @@ class HistoryFragment : Fragment() {
 
         val adapter = HistoryAdapter { soil ->
             val detailIntent = Intent(activity, DetailHistoryActivity::class.java)
-            detailIntent.putExtra(DetailHistoryActivity.HISTORY, soil)
+            detailIntent.putExtra(HISTORY, soil)
             startActivity(detailIntent)
         }
 
@@ -66,6 +64,4 @@ class HistoryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    companion object {}
 }

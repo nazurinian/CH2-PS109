@@ -14,6 +14,8 @@ import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.pref.UserPreference
 import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.ActivityProfilBinding
+import com.submission.soilink.util.CHANE_NAME_DIALOG
+import com.submission.soilink.util.CHANE_PASSWORD_DIALOG
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
@@ -38,11 +40,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-//        val user = intent.getStringExtra(DATA_PROFILE)
         val toolbar = binding.topAppBar
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
-//            title = "Profile"
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
@@ -54,11 +54,11 @@ class ProfileActivity : AppCompatActivity() {
         }
         binding.changeName.setOnClickListener {
             val changeNameFragment = ChangeNameFragment()
-            changeNameFragment.show(supportFragmentManager, "ChangeNameDialog")
+            changeNameFragment.show(supportFragmentManager, CHANE_NAME_DIALOG)
         }
         binding.changePassword.setOnClickListener {
             val changePasswordFragment = ChangePasswordFragment()
-            changePasswordFragment.show(supportFragmentManager, "ChangePasswordDialog")
+            changePasswordFragment.show(supportFragmentManager, CHANE_PASSWORD_DIALOG)
         }
     }
 

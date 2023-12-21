@@ -41,6 +41,7 @@ class DetailHistoryActivity : AppCompatActivity() {
             val chooser = Intent.createChooser(sendIntent, title)
             startActivity(chooser)
         }
+
         binding.btnDelete.setOnClickListener {
             showToast(this, "Fitur ini masih dalam tahap pengembangan")
         }

@@ -6,7 +6,6 @@ import com.submission.soilink.data.SoilInkRepository
 import kotlinx.coroutines.launch
 
 class ProfileViewModel (private val repository: SoilInkRepository) : ViewModel() {
-//    var name = MutableLiveData<String>()
 
     fun getUserProfile(email: String) = repository.profile(email)
 

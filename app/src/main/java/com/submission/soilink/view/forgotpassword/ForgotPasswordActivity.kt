@@ -13,7 +13,6 @@ import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import com.submission.soilink.R
 import com.submission.soilink.data.ResultState
@@ -21,7 +20,6 @@ import com.submission.soilink.databinding.ActivityForgotPasswordBinding
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
-import com.submission.soilink.view.login.LoginViewModel
 
 class ForgotPasswordActivity : AppCompatActivity() {
     private val viewModel by viewModels<ForgetPasswordModel> {
@@ -61,8 +59,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         emailField.apply {
             layout = emailLayout
             minimumLength = 6
-//            errorMessage = getString(R.string.error_email_too_short)
-            errorMessage = "Email minimal 6 karakter"
+            errorMessage = getString(R.string.error_email_too_short)
             doOnTextChanged { text, _, _, _ ->
                 email = if (text.toString()
                         .isEmpty() || text.toString().length < 6
@@ -72,12 +69,10 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         binding.resetButton.setOnClickListener {
             if (!email.isNullOrEmpty()) {
-                //email yg mau direset paswordnya
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-//                showToast(this, "Fitur reset password sedang dalam masa pengembangan")
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 viewModel.sendLinkResetPassword(email.toString()).observe(this) { result ->
                     when (result) {
                         is ResultState.Loading -> {
@@ -93,7 +88,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                             showToast(
                                 this,
-                                "Link reset password berhasil dikirimkan, silahkan cek kotak masuk email anda."
+                                getString(R.string.success_send_link)
                             )
 
                             val intentToLogin = Intent(this, LoginActivity::class.java)
@@ -101,22 +96,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                                 Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
                             startActivity(intentToLogin)
                             finish()
-//                            AlertDialog.Builder(this).apply {
-//                                // setTitle(getString(R.string.info_login_alert))
-//                                // setMessage(getString(R.string.login_message))
-//                                setTitle("Informasi")
-//                                setMessage("Link reset password berhasil dikirimkan, silahkan cek kotak masuk email anda.")
-//                                setCancelable(false)
-//                                setPositiveButton(getString(R.string.login)) { _, _ ->
-//                                    val intentToLogin = Intent(context, LoginActivity::class.java)
-//                                    intentToLogin.flags =
-//                                        Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                                    startActivity(intentToLogin)
-//                                    finish()
-//                                }
-//                                create()
-//                                show()
-//                            }
                         }
 
                         is ResultState.Error -> {
@@ -128,8 +107,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }
             } else {
                 if (emailField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
-                    val errorTextIsEmpty = "Email tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
                     emailLayout.error = errorTextIsEmpty
                 }
             }

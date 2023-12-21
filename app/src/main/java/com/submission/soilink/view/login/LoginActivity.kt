@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -22,6 +21,7 @@ import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.model.LoginRegistrationModel
 import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.databinding.ActivityLoginBinding
+import com.submission.soilink.util.EMAIL
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.forgotpassword.ForgotPasswordActivity
@@ -71,8 +71,7 @@ class LoginActivity : AppCompatActivity() {
         emailField.apply {
             layout = emailLayout
             minimumLength = 6
-//            errorMessage = getString(R.string.error_email_too_short)
-            errorMessage = "Email minimal 6 karakter"
+            errorMessage = getString(R.string.error_email_too_short)
             doOnTextChanged { text, _, _, _ ->
                 email = if (text.toString()
                         .isEmpty() || text.toString().length < 6
@@ -83,8 +82,7 @@ class LoginActivity : AppCompatActivity() {
         passwordField.apply {
             layout = passwordLayout
             minimumLength = 8
-//            errorMessage = getString(R.string.error_password_too_short)
-            errorMessage = "Kata sandi minimal 8 karakter"
+            errorMessage = getString(R.string.error_password_too_short)
             doOnTextChanged { text, _, _, _ ->
                 password = if (text.toString()
                         .isEmpty() || text.toString().length < 8
@@ -124,13 +122,9 @@ class LoginActivity : AppCompatActivity() {
                                     )
                                 )
 
-                                Log.d("njirr", dataResult.toString())
-
                                 AlertDialog.Builder(this).apply {
-//                                    setTitle(getString(R.string.info_login_alert))
-                                    setTitle("Selamat...")
-//                                    setMessage(getString(R.string.login_message))
-                                    setMessage("Login berhasil dilakukan dengan menggunakan email: $email")
+                                    setTitle(getString(R.string.info_login_registration_alert))
+                                    setMessage(getString(R.string.login_message, email))
                                     setCancelable(false)
                                     setPositiveButton(getString(R.string.login)) { _, _ ->
                                         val intentToHome = Intent(context, HomeActivity::class.java)
@@ -150,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
 
                             is ResultState.Error -> {
                                 window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                if (result.error.contains("email")) {
+                                if (result.error.contains(EMAIL)) {
                                     emailLayout.error = getString(R.string.email_pattern)
                                 } else {
                                     showToast(this, result.error)
@@ -162,13 +156,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
                 if (emailField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
-                    val errorTextIsEmpty = "Email tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
                     emailLayout.error = errorTextIsEmpty
                 }
                 if (passwordField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
-                    val errorTextIsEmpty = "Password tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
                     passwordLayout.error = errorTextIsEmpty
                 }
             }

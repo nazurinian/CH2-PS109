@@ -16,9 +16,7 @@ class ChangeNameFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            // Handle arguments if needed
-        }
+        arguments?.let {}
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,31 +29,21 @@ class ChangeNameFragment : DialogFragment() {
         val btnYes = view.findViewById<Button>(R.id.btn_yes)
         val btnNo = view.findViewById<Button>(R.id.btn_no)
 
-        // Customize the dialog as needed, set title, buttons, etc.
         builder.setView(view)
 
-        // Set OnClickListener for "Yes" button
         btnYes.setOnClickListener {
             val enteredName = changeNameText.text.toString()
-
-            // Reset error
             changeNameTextLayout.error = null
 
             if (enteredName.length < 3) {
-                // Display error message for minimum length
-                changeNameTextLayout.error = "Name must be at least 3 characters"
+                changeNameTextLayout.error = getString(R.string.error_name_too_short)
             } else {
-                showToast(requireContext(), "Nama Berhasil Diganti: $enteredName")
-                // Do something with enteredName
-                // Dismiss the dialog or perform other actions
+                showToast(requireContext(), getString(R.string.success_change_name, enteredName))
                 dismiss()
             }
         }
 
-        // Set OnClickListener for "No" button
         btnNo.setOnClickListener {
-            // Handle negative button click
-            // Dismiss the dialog or perform other actions
             dismiss()
         }
 

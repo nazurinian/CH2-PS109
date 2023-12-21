@@ -1,13 +1,8 @@
 package com.submission.soilink.view.home
 
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.OpenableColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +16,8 @@ import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.pref.UserPreference
 import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.FragmentHomeBinding
+import com.submission.soilink.util.EXTRA_IMAGE_URI
 import com.submission.soilink.util.accountName
-import com.submission.soilink.util.getCurrentDate
 import com.submission.soilink.util.reduceFileImage
 import com.submission.soilink.util.showToast
 import com.submission.soilink.util.uriToFile
@@ -30,13 +25,9 @@ import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.about.AboutActivity
 import com.submission.soilink.view.profile.ProfileActivity
 import com.submission.soilink.view.result.ResultActivity
-import com.submission.soilink.view.result.ResultActivity.Companion.EXTRA_IMAGE_URI
 import com.submission.soilink.view.soillist.SoilListActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
 
 class HomeFragment : Fragment() {
 
@@ -100,11 +91,11 @@ class HomeFragment : Fragment() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            showToast(requireContext(), "Telah memilih gambar")
+            showToast(requireContext(), getString(R.string.select_image))
             currentImageUri = uri
             processImage()
         } else {
-            showToast(requireContext(), "Tidak ada gambar yang dipilih")
+            showToast(requireContext(), getString(R.string.failed_choose_image))
         }
     }
 
@@ -113,11 +104,11 @@ class HomeFragment : Fragment() {
             val imageFile = uriToFile(uri, requireContext()).reduceFileImage()
 
             AlertDialog.Builder(requireContext()).apply {
-                setTitle("Cek tipe tanah?")
+                setTitle(getString(R.string.check_soil_type))
                 setCancelable(false)
-                setNegativeButton("Yes") { _, _ ->
-                    showToast(requireContext(), "Memulai proses cek tipe tanah")
-                    //logika upload data ke internet sekaligus proses bar on loading, success, error
+                setNegativeButton(getString(R.string.btn_yes)) { _, _ ->
+                    showToast(requireContext(), getString(R.string.start_check))
+
                     viewModel.uploadPicture(imageFile).observe(requireActivity()) { result ->
                         if (result != null) {
                             when (result) {
@@ -141,8 +132,8 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-                setPositiveButton("No") { _, _ ->
-                    showToast(requireContext(), "Tidak jadi memprosess")
+                setPositiveButton(getString(R.string.btn_no)) { _, _ ->
+                    showToast(requireContext(), getString(R.string.not_processing))
                 }
                 create()
                 show()

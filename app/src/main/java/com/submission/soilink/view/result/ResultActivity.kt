@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.submission.soilink.databinding.ActivityResultBinding
+import com.submission.soilink.util.EXTRA_IMAGE_URI
 
 class ResultActivity : AppCompatActivity() {
     
@@ -18,7 +19,6 @@ class ResultActivity : AppCompatActivity() {
 
         setupAction()
 
-        // Menerima URI gambar dari intent
         val imageUriString = intent.getStringExtra(EXTRA_IMAGE_URI)?.toUri()
         imageUriString.let { uri ->
             Log.d("Image URI", "showImage: $uri")
@@ -34,9 +34,5 @@ class ResultActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-    }
-
-    companion object {
-        const val EXTRA_IMAGE_URI = "EXTRA_IMAGE_URI"
     }
 }

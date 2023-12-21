@@ -19,6 +19,7 @@ import com.submission.soilink.data.model.LoginRegistrationModel
 import com.submission.soilink.data.ResultState
 import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.databinding.ActivityRegisterBinding
+import com.submission.soilink.util.EMAIL
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.home.HomeActivity
@@ -73,8 +74,7 @@ class RegisterActivity : AppCompatActivity() {
         nameField.apply {
             layout = nameLayout
             minimumLength = 3
-//            errorMessage = getString(R.string.error_name_too_short)
-            errorMessage = "Nama minimal 3 karakter"
+            errorMessage = getString(R.string.error_name_too_short)
             doOnTextChanged { text, _, _, _ ->
                 name = if (text.toString()
                         .isEmpty() || text.toString().length < 3
@@ -85,8 +85,7 @@ class RegisterActivity : AppCompatActivity() {
         emailField.apply {
             layout = emailLayout
             minimumLength = 6
-//            errorMessage = getString(R.string.error_email_too_short)
-            errorMessage = "Email minimal 6 karakter"
+            errorMessage = getString(R.string.error_email_too_short)
             doOnTextChanged { text, _, _, _ ->
                 email = if (text.toString()
                         .isEmpty() || text.toString().length < 6
@@ -97,8 +96,7 @@ class RegisterActivity : AppCompatActivity() {
         passwordField.apply {
             layout = passwordLayout
             minimumLength = 8
-//            errorMessage = getString(R.string.error_password_too_short)
-            errorMessage = "Kata sandi minimal 8 karakter"
+            errorMessage = getString(R.string.error_password_too_short)
             doOnTextChanged { text, _, _, _ ->
                 password = if (text.toString()
                         .isEmpty() || text.toString().length < 8
@@ -109,8 +107,7 @@ class RegisterActivity : AppCompatActivity() {
         confirmPasswordField.apply {
             layout = confirmPasswordLayout
             minimumLength = 8
-//            errorMessage = getString(R.string.error_password_too_short)
-            errorMessage = "Konfirmasi kata sandi minimal 8 karakter"
+            errorMessage = getString(R.string.error_confirmation_password_too_short)
             doOnTextChanged { text, _, _, _ ->
                 confirmPassword = if (text.toString()
                         .isEmpty() || text.toString().length < 8
@@ -121,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.signupButton.setOnClickListener {
             if (!name.isNullOrEmpty() && !email.isNullOrEmpty() && !password.isNullOrEmpty() && !confirmPassword.isNullOrEmpty()) {
                 if (confirmPassword != password) {
-                    showToast(this, "Password tidak sesuai")
+                    showToast(this, getString(R.string.password_mismatch))
                 } else {
                     val dataUser = LoginRegistrationModel(name.toString(), email.toString(), password.toString(), confirmPassword.toString())
                     viewModel.startRegistration(dataUser).observe(this) { result ->
@@ -162,10 +159,8 @@ class RegisterActivity : AppCompatActivity() {
                                                     )
 
                                                     AlertDialog.Builder(this).apply {
-//                                                    setTitle(getString(R.string.info_register_alert))
-                                                        setTitle("Selamat...")
-//                                                    setMessage(getString(R.string.register_message, email))
-                                                        setMessage("Akun dengan email: $email berhasil dibuat")
+                                                        setTitle(getString(R.string.info_login_registration_alert))
+                                                        setMessage(getString(R.string.register_message, email))
                                                         setCancelable(false)
                                                         setPositiveButton(getString(R.string.login)) { _, _ ->
                                                             val intentToHome = Intent(context, HomeActivity::class.java)
@@ -192,9 +187,8 @@ class RegisterActivity : AppCompatActivity() {
 
                                 is ResultState.Error -> {
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                                    if (result.error.contains("email")) {
-//                                    emailLayout.error = getString(R.string.email_pattern)
-                                        emailLayout.error = "Isi dengan email"
+                                    if (result.error.contains(EMAIL)) {
+                                    emailLayout.error = getString(R.string.email_pattern)
                                     } else {
                                         showToast(this, result.error)
                                     }
@@ -206,23 +200,19 @@ class RegisterActivity : AppCompatActivity() {
                 }
             } else {
                 if (nameField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_name_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_name_is_empty)
                     nameLayout.error = errorTextIsEmpty
                 }
                 if (emailField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_email_is_empty)
                     emailLayout.error = errorTextIsEmpty
                 }
                 if (passwordField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
                     passwordLayout.error = errorTextIsEmpty
                 }
                 if (confirmPasswordField.text.toString().isEmpty()) {
-//                    val errorTextIsEmpty = getString(R.string.error_password_is_empty)
-                    val errorTextIsEmpty = "Tidak boleh kosong"
+                    val errorTextIsEmpty = getString(R.string.error_confirmation_password_is_empty)
                     confirmPasswordLayout.error = errorTextIsEmpty
                 }
             }

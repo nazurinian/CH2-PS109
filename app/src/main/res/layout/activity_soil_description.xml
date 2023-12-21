@@ -32,7 +32,7 @@
                 style="@style/ThemeOverlay.Material3.Toolbar.Surface.Color"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="Soil Description"
+                android:contentDescription="@string/soil_description"
                 android:theme="@style/customTextColor"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="Soil Description"
@@ -86,7 +86,6 @@
                     android:layout_marginBottom="1dp"
                     android:gravity="bottom"
                     android:paddingHorizontal="8dp"
-                    android:text="Tanah Pasir"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -102,15 +101,12 @@
                     android:background="@drawable/blank_rect_white"
                     android:justificationMode="inter_word"
                     android:padding="8dp"
-                    android:text="Tanah pasir memiliki keuntungan drainase yang baik, membuatnya cocok untuk pembangunan di daerah dengan curah hujan tinggi. Namun, karena kurangnya kandungan lempung dan humus, tanah ini kurang stabil.Oleh karena itu, untuk pembangunan berat atau struktur tinggi, perlu perencanaan fondasi yang cermat untuk mengatasi ketidakstabilan tanah.Tanah pasir memiliki keuntungan drainase yang baik, membuatnya cocok untuk pembangunan di daerah dengan curah hujan tinggi. Namun, karena kurangnya kandungan lempung dan humus, tanah ini kurang stabil.Oleh karena itu, untuk pembangunan berat atau struktur tinggi, perlu perencanaan fondasi yang cermat untuk mengatasi ketidakstabilan tanah.Tanah pasir memiliki keuntungan drainase yang baik, membuatnya cocok untuk pembangunan di daerah dengan curah hujan tinggi. Namun, karena kurangnya kandungan lempung dan humus, tanah ini kurang stabil.Oleh karena itu, untuk pembangunan berat atau struktur tinggi, perlu perencanaan fondasi yang cermat untuk mengatasi ketidakstabilan tanah."
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

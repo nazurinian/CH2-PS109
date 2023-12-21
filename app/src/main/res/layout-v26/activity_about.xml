@@ -22,7 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/customTextColor"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:title="@string/about_page"
+            app:title="About"
             app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -69,7 +69,7 @@
                 android:layout_marginTop="30dp"
                 android:justificationMode="inter_word"
                 android:padding="14dp"
-                android:text="@string/about_soilink_1"
+                android:text="Soilink hadir sebagai mitra Anda dalam merencanakan masa depan pembangunan yang berkelanjutan dan efisien. Mari bergabung bersama kami untuk membuat setiap proyek konstruksi menjadi sukses dengan pemilihan tanah yang tepat."
                 android:textAlignment="center"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
-                    android:text="@string/about_info"
+                    android:text="Tujuan"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:justificationMode="inter_word"
-                    android:text="@string/about_soilink_2"
+                    android:text="Soilink bertujuan untuk memberikan bantuan berharga kepada masyarakat umum, pengembang properti, dan perencana kota. Kami tidak hanya menyediakan informasi detil tentang jenis tanah, tetapi juga berfokus pada cara efektif untuk mengenali tanah dengan akurasi tinggi. Melalui aplikasi ini, kami berkomitmen untuk meningkatkan keberlanjutan dan efisiensi dalam pengembangan daerah."
                     android:textAlignment="center"
                     android:textSize="14sp" />
             </LinearLayout>

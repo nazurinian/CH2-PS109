@@ -21,6 +21,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.submission.soilink.R
 import com.submission.soilink.data.ResultState
 import com.submission.soilink.databinding.ActivityCameraBinding
+import com.submission.soilink.util.EXTRA_IMAGE_URI
 import com.submission.soilink.util.NetworkCheck
 import com.submission.soilink.util.createCustomTempFile
 import com.submission.soilink.util.reduceFileImage
@@ -29,7 +30,6 @@ import com.submission.soilink.util.uriToFile
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.result.ResultActivity
-import com.submission.soilink.view.result.ResultActivity.Companion.EXTRA_IMAGE_URI
 
 /**
  * 1. get Lokasi
@@ -85,7 +85,7 @@ class CameraActivity : AppCompatActivity() {
 
         binding.btnCamera.setOnClickListener {
             if (internetResult) {
-                showToast(this, "Mengambil gambar")
+                showToast(this, getString(R.string.get_image))
                 takePhoto()
             } else {
                 showToast(this, getString(R.string.no_internet_connection))
@@ -156,7 +156,7 @@ class CameraActivity : AppCompatActivity() {
             try {
                 bindCamera()
             } catch (exc: Exception) {
-                showToast(this, "Gagal memulai kamera")
+                showToast(this, getString(R.string.load_camera_failed))
             }
         }, ContextCompat.getMainExecutor(this))
     }
@@ -168,11 +168,11 @@ class CameraActivity : AppCompatActivity() {
         unBindCamera()
 
         AlertDialog.Builder(this).apply {
-            setTitle("Cek tipe tanah?")
+            setTitle(getString(R.string.check_soil_type))
             setCancelable(false)
-            setNegativeButton("Yes") { _, _ ->
-                showToast(context, "Memulai proses cek tipe tanah")
-                //logika upload data ke internet sekaligus proses bar on loading, success, error
+            setNegativeButton(getString(R.string.btn_yes)) { _, _ ->
+                showToast(context, getString(R.string.start_check))
+
                 imageCapture.takePicture(
                     outputOptions,
                     ContextCompat.getMainExecutor(context),
@@ -220,14 +220,14 @@ class CameraActivity : AppCompatActivity() {
                         override fun onError(exc: ImageCaptureException) {
                             bindCamera()
                             showLoading(false)
-                            showToast(context, "Gagal mengambil gambar.")
+                            showToast(context, getString(R.string.failed_capture_image))
                         }
                     }
                 )
             }
-            setPositiveButton("No") { _, _ ->
+            setPositiveButton(getString(R.string.btn_no)) { _, _ ->
                 showLoading(false)
-                showToast(context, "Tidak jadi memprosess")
+                showToast(context, getString(R.string.not_processing))
                 bindCamera()
             }
             create()
