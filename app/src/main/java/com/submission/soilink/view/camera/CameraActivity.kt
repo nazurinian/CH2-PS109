@@ -1,6 +1,12 @@
 package com.submission.soilink.view.camera
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +22,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.common.util.concurrent.ListenableFuture
 import com.submission.soilink.R
@@ -25,18 +32,14 @@ import com.submission.soilink.util.EXTRA_IMAGE_URI
 import com.submission.soilink.util.NetworkCheck
 import com.submission.soilink.util.createCustomTempFile
 import com.submission.soilink.util.reduceFileImage
+import com.submission.soilink.util.showLocation
 import com.submission.soilink.util.showToast
 import com.submission.soilink.util.uriToFile
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.result.ResultActivity
 
-/**
- * 1. get Lokasi
- * 2. setup list soil
- * 3. setup home information ntr bisa di expand
- * */
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity(), LocationListener {
 
     private lateinit var binding: ActivityCameraBinding
     private lateinit var networkCheck: NetworkCheck
@@ -47,6 +50,11 @@ class CameraActivity : AppCompatActivity() {
     private var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private var preview: Preview? = null
+
+    private lateinit var locationManager: LocationManager
+    private var latitude: Double? = null
+    private var longitude: Double? = null
+    private val locationPermissionCode = 2
 
 
     private val viewModel by viewModels<HomeViewModel> {
@@ -86,6 +94,7 @@ class CameraActivity : AppCompatActivity() {
         binding.btnCamera.setOnClickListener {
             if (internetResult) {
                 showToast(this, getString(R.string.get_image))
+                getLocation()
                 takePhoto()
             } else {
                 showToast(this, getString(R.string.no_internet_connection))
@@ -179,7 +188,6 @@ class CameraActivity : AppCompatActivity() {
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             output.savedUri?.let { uri ->
-                                showToast(context, uri.toString())
                                 val imageFile = uriToFile(uri, context).reduceFileImage()
 
                                 viewModel.uploadPicture(imageFile)
@@ -191,6 +199,9 @@ class CameraActivity : AppCompatActivity() {
                                                 }
 
                                                 is ResultState.Success -> {
+                                                    showToast(context, getString(R.string.post_successfull))
+                                                    val location = showLocation(context, latitude!!, longitude!!)
+                                                    showToast(context, location)
                                                     val intent =
                                                         Intent(context, ResultActivity::class.java)
                                                     intent.putExtra(
@@ -199,10 +210,6 @@ class CameraActivity : AppCompatActivity() {
                                                     )
                                                     startActivity(intent)
                                                     finish()
-                                                    showToast(
-                                                        context,
-                                                        getString(R.string.post_successfull)
-                                                    )
                                                 }
 
                                                 is ResultState.Error -> {
@@ -247,7 +254,21 @@ class CameraActivity : AppCompatActivity() {
 
     private fun unBindCamera() {
         cameraProvider?.unbind(preview)
+    }
 
+    private fun getLocation() {
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5F, this)
+    }
+
+    override fun onLocationChanged(location: Location) {
+        latitude = location.latitude
+        longitude = location.longitude
+
+        locationManager.removeUpdates(this)
     }
 
     private fun showLoading(isLoading: Boolean) {

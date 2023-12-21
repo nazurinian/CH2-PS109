@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -255,28 +256,46 @@
 
                 <ImageView
                     android:id="@+id/soil_information_image"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintWidth_percent="0.7"
+                    android:layout_width="400dp"
+                    android:layout_height="200dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/soil_home_example"
+                    android:src="@drawable/soil_information_home"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
 
-                <TextView
+                <com.ms.square.android.expandabletextview.ExpandableTextView
                     android:id="@+id/soil_information_description"
-                    android:layout_width="wrap_content"
+                    style="@style/TextAppearance.Material3.TitleSmall"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:justificationMode="inter_word"
-                    android:maxLines="4"
-                    android:text="@string/soil_information_desctiprion"
-                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"
+                    app:animAlphaStart="0.6"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/soil_information_image" />
+                    app:layout_constraintTop_toBottomOf="@id/soil_information_image"
+                    expandableTextView:animDuration="300"
+                    expandableTextView:maxCollapsedLines="4">
+
+                    <TextView
+                        android:id="@+id/expandable_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:justificationMode="inter_word"
+                        android:textSize="14sp" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:background="@android:color/transparent"
+                        android:padding="16dp"
+                        android:src="@drawable/ic_delete" />
+
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

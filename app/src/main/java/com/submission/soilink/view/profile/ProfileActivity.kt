@@ -16,6 +16,7 @@ import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.ActivityProfilBinding
 import com.submission.soilink.util.CHANE_NAME_DIALOG
 import com.submission.soilink.util.CHANE_PASSWORD_DIALOG
+import com.submission.soilink.util.NetworkCheck
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.login.LoginActivity
@@ -29,14 +30,22 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityProfilBinding
+    private lateinit var networkCheck: NetworkCheck
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        showProfile()
         setupAction()
+        networkCheck.observe(this) { hasNetwork ->
+            if (hasNetwork) {
+                lostConnection(false)
+                showProfile()
+            } else {
+                lostConnection(true)
+            }
+        }
     }
 
     private fun setupAction() {
@@ -60,6 +69,7 @@ class ProfileActivity : AppCompatActivity() {
             val changePasswordFragment = ChangePasswordFragment()
             changePasswordFragment.show(supportFragmentManager, CHANE_PASSWORD_DIALOG)
         }
+        networkCheck = NetworkCheck(this)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -75,11 +85,6 @@ class ProfileActivity : AppCompatActivity() {
                 is ResultState.Success -> {
                     showLoading(false)
                     val profile = result.data.user
-
-//                    Glide.with(binding.root)
-//                        .load(getDrawable(R.drawable.senyum))
-//                        .placeholder(R.drawable.avatar_male)
-//                        .into(binding.profile)
                     binding.textBelowImage.text = profile?.displayName
                     binding.textBottom.text = profile?.email
                 }
@@ -90,6 +95,11 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun lostConnection(isLost: Boolean) {
+        binding.detailProfile.visibility = if (isLost) View.GONE else View.VISIBLE
+        binding.internetLost.visibility = if (isLost) View.VISIBLE else View.GONE
     }
 
     private fun showLoading(isLoading: Boolean) {

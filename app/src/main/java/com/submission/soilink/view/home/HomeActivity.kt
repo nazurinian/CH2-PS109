@@ -21,12 +21,7 @@ import com.submission.soilink.view.camera.CameraActivity
 
 class HomeActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<HomeViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
-
     private lateinit var binding: ActivityHomeBinding
-    private var imageUri: Uri? = null
 
     private val requestPermissionLaunch =
         registerForActivityResult(

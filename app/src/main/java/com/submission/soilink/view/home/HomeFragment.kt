@@ -1,6 +1,14 @@
 package com.submission.soilink.view.home
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +17,8 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.submission.soilink.R
@@ -17,8 +27,10 @@ import com.submission.soilink.data.pref.UserPreference
 import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.FragmentHomeBinding
 import com.submission.soilink.util.EXTRA_IMAGE_URI
+import com.submission.soilink.util.NetworkCheck
 import com.submission.soilink.util.accountName
 import com.submission.soilink.util.reduceFileImage
+import com.submission.soilink.util.showLocation
 import com.submission.soilink.util.showToast
 import com.submission.soilink.util.uriToFile
 import com.submission.soilink.view.ViewModelFactory
@@ -28,8 +40,20 @@ import com.submission.soilink.view.result.ResultActivity
 import com.submission.soilink.view.soillist.SoilListActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.io.IOException
+import java.util.Locale
 
-class HomeFragment : Fragment() {
+/**
+ * 3. get Lokasi, dan tanggal untuk dipush ke cloud (result activity) , izin penyimpanan, cek internet untuk halaman lainnya, hapus respon yg ga kepake
+ * 4. result page
+ * 5. history page
+ *
+ * 1. hapus string tidak kepake, log, dan lainlain
+ * 2. cek koneksi ketika tidak ada koneksi aplikasi tidak ada internet (halaman soillist, deskripsinya, dan history)
+ * 3. cek string
+ * 4. testing bersama
+ * */
+class HomeFragment : Fragment(), LocationListener {
 
     private val viewModel by viewModels<HomeViewModel> {
         ViewModelFactory.getInstance(requireActivity())
@@ -39,6 +63,14 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var currentImageUri: Uri? = null
+    private lateinit var locationManager: LocationManager
+    private var latitude: Double? = null
+    private var longitude: Double? = null
+    private val locationPermissionCode = 2
+
+    private lateinit var networkCheck: NetworkCheck
+    private var internetResult = true
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +87,8 @@ class HomeFragment : Fragment() {
         val user = runBlocking { pref.getSession().first() }
 
         setupAction(user.name)
+        locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        checkInternetConnection()
     }
 
     private fun setupAction(userName: String) {
@@ -69,7 +103,12 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnCheckSoil.setOnClickListener {
-            startGallery()
+            if (internetResult) {
+                getLocation()
+                startGallery()
+            } else {
+                showToast(requireContext(), getString(R.string.no_internet_connection))
+            }
         }
 
         binding.btnSoilList.setOnClickListener {
@@ -81,6 +120,9 @@ class HomeFragment : Fragment() {
             val intent = Intent(activity, AboutActivity::class.java)
             startActivity(intent)
         }
+
+        binding.soilInformationDescription.text = getString(R.string.soil_information_desctiprion)
+        networkCheck = NetworkCheck(requireContext())
     }
 
     private fun startGallery() {
@@ -118,6 +160,8 @@ class HomeFragment : Fragment() {
 
                                 is ResultState.Success -> {
                                     showToast(context, getString(R.string.post_successfull))
+                                    val location = showLocation(context, latitude!!, longitude!!)
+                                    showToast(context, location)
                                     showLoading(false)
                                     val intent = Intent(context, ResultActivity::class.java)
                                     intent.putExtra(EXTRA_IMAGE_URI, uri.toString())
@@ -138,6 +182,27 @@ class HomeFragment : Fragment() {
                 create()
                 show()
             }
+        }
+    }
+
+    private fun getLocation() {
+        locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5F, this)
+    }
+
+    override fun onLocationChanged(location: Location) {
+        latitude = location.latitude
+        longitude = location.longitude
+
+        locationManager.removeUpdates(this)
+    }
+
+    private fun checkInternetConnection() {
+        networkCheck.observe(viewLifecycleOwner) { hasNetwork ->
+            internetResult = hasNetwork
         }
     }
 

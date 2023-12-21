@@ -10,6 +10,7 @@ import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.login.LoginViewModel
 import com.submission.soilink.view.profile.ProfileViewModel
 import com.submission.soilink.view.register.RegisterViewModel
+import com.submission.soilink.view.soillist.SoilListViewModel
 
 class ViewModelFactory(private val repository: SoilInkRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -35,6 +36,10 @@ class ViewModelFactory(private val repository: SoilInkRepository) :
 
             modelClass.isAssignableFrom(ForgetPasswordModel::class.java) -> {
                 ForgetPasswordModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(SoilListViewModel::class.java) -> {
+                SoilListViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

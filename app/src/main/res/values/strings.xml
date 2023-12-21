@@ -106,5 +106,22 @@
     <string name="soil_system_menu">Soil system menu</string>
     <string name="about_page">About</string>
     <string name="soil_information">Soil information</string>
-    <string name="soil_information_desctiprion">Soil, the biologically active, porous medium that has developed in the uppermost layer of Earth’s crust. Soil is one of the principal substrata of life on Earth, serving as a reservoir of water and nutrients, as a medium for the filtration and breakdown of injurious wastes, and as a participant in the cycling of carbon and other elements through the global ecosystem. It has evolved through weathering processes driven by biological, climatic, geologic, and topographic influences.</string>
+    <string name="soil_information_desctiprion">Maximizing Land Use: A Practical Guide to Proper Land Utilization.\n
+        Proper and effective land use is crucial to ensure environmental sustainability and provide long-term benefits to society. In the realm of development, a profound understanding of the types of soil in a location is key to optimizing construction projects. With technological advancements, soil type detection applications have become invaluable tools in identifying soil characteristics and planning suitable developments. Here are some significant benefits of utilizing land based on its type in development:\n
+        \n1. Optimize Structural Design :\n
+        Different soil types have varying load-bearing capacities and stability. By understanding soil characteristics, civil engineers can optimize structural designs, ensuring the safety and resilience of buildings against specific loads and pressures.\n
+        \n2. Efficient Foundations :\n
+        The right foundation design is crucial to ensuring the sustainability of a building. Soil type determines the most suitable foundation type. By selecting an appropriate foundation, structural damage can be avoided, and construction costs can be minimized.\n
+        \n3. Effective Water Management :\n
+        Soil type affects natural drainage and water retention. By wisely utilizing the land, effective drainage systems can be planned, reducing the risk of waterlogging and maintaining soil stability over time.\n
+        \n4. Optimize Land Use :\n
+        Each soil type has different potentials for various uses. By utilizing the land based on its type, optimal land use can be achieved, ensuring that each area is maximized according to its soil characteristics.\n
+        \n5. Soil and Energy Conservation :\n
+        Understanding soil types aids in planning suitable soil conservation measures. This includes planting ground cover vegetation, preventing erosion, and preserving soil layers. Additionally, identifying geothermal energy potential supports the development of renewable energy resources.\n
+        \n6. Resource Use Efficiency :\n
+        The right soil type can influence the efficiency of resource use, such as water and energy. By utilizing the land wisely, more efficient and sustainable systems can be designed, creating a more environmentally friendly environment.\n
+        \n7. Risk and Security Analysis :\n
+        Each soil type carries different risks related to earthquakes, floods, or climate change. Conducting risk analysis based on soil types helps implement appropriate mitigation measures, enhancing the security of infrastructure.
+    </string>
+    <string name="no_connection">No internet\nconnection</string>
 </resources>

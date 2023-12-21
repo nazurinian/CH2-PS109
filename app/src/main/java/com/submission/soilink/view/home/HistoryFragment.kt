@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.submission.soilink.data.SoilListData
 import com.submission.soilink.databinding.FragmentHistoryBinding
+import com.submission.soilink.util.NetworkCheck
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.detailhistory.DetailHistoryActivity
 import com.submission.soilink.view.detailhistory.DetailHistoryActivity.Companion.HISTORY
@@ -22,6 +23,7 @@ class HistoryFragment : Fragment() {
 
     private  var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!
+    private lateinit var networkCheck: NetworkCheck
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +37,19 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(itemView, savedInstanceState)
 
         setupAction()
-        showSoilList()
+        networkCheck.observe(viewLifecycleOwner) { hasNetwork ->
+            if (hasNetwork) {
+                lostConnection(false)
+                showSoilList()
+            } else {
+                lostConnection(true)
+            }
+        }
     }
 
-    private fun setupAction() {}
+    private fun setupAction() {
+        networkCheck = NetworkCheck(requireContext())
+    }
 
     private fun showSoilList() {
         val layoutManager = LinearLayoutManager(activity)
@@ -54,6 +65,11 @@ class HistoryFragment : Fragment() {
         historyAdapter.adapter = adapter
 
         adapter.submitList(SoilListData().soilList())
+    }
+
+    private fun lostConnection(isLost: Boolean) {
+        binding.rvHistoryList.visibility = if (isLost) View.GONE else View.VISIBLE
+        binding.internetLost.visibility = if (isLost) View.VISIBLE else View.GONE
     }
 
     private fun showLoading(isLoading: Boolean) {

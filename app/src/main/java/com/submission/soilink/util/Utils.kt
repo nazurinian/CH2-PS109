@@ -5,16 +5,23 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.camera.core.ImageCapture
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.submission.soilink.R
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -125,4 +132,31 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     return Bitmap.createBitmap(
         source, 0, 0, source.width, source.height, matrix, true
     )
+}
+
+fun showLocation(context: Context, latitude: Double, longitude: Double): String {
+    val geocoder = Geocoder(context, Locale.getDefault())
+    var kecamatan: String? = null
+    var kota: String? = null
+    try {
+        val addresses = geocoder.getFromLocation(latitude, longitude, 1)!!
+        if (addresses.isNotEmpty()) {
+            val address: Address = addresses[0]
+            val addressDetails = "Address: ${address.getAddressLine(0)}"
+            kecamatan = address.locality ?: ""
+            kota = address.subAdminArea ?: ""
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return "$kecamatan, $kota"
+}
+
+fun ImageView.loadImage(url: String) {
+    val requestOptions = RequestOptions()
+        .error(R.drawable.ic_disconnected)
+    Glide.with(this.context)
+        .setDefaultRequestOptions(requestOptions)
+        .load(url)
+        .into(this)
 }

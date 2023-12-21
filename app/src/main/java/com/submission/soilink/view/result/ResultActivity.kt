@@ -10,7 +10,6 @@ import com.submission.soilink.util.EXTRA_IMAGE_URI
 class ResultActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityResultBinding
-//    private var currentImageUri: Uri? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
