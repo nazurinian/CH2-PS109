@@ -104,7 +104,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
-        var detailProfile = binding.detailProfile
+        val detailProfile = binding.detailProfile
         detailProfile.apply {
             if (isLoading) {
                 visibility = View.GONE

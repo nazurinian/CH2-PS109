@@ -124,4 +124,14 @@
         Each soil type carries different risks related to earthquakes, floods, or climate change. Conducting risk analysis based on soil types helps implement appropriate mitigation measures, enhancing the security of infrastructure.
     </string>
     <string name="no_connection">No internet\nconnection</string>
+    <string name="all_permission_granted">All permissions have been granted</string>
+    <string name="all_permission_denied">Some permissions are still denied</string>
+    <string name="fine_gps_granted">Fine location permission granted</string>
+    <string name="fine_gps_denied">Fine location permission denied</string>
+    <string name="write_storage_granted">Write storage permission granted</string>
+    <string name="write_storage_denied">Write storage permission denied</string>
+    <string name="coarse_gps_granted">General location permission granted</string>
+    <string name="coarse_gps_denied">General location permission denied</string>
+    <string name="camera_permission_granted">Camera permission granted</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
 </resources>

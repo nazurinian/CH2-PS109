@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.View
@@ -24,13 +25,23 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.common.util.concurrent.ListenableFuture
 import com.submission.soilink.R
 import com.submission.soilink.data.ResultState
+import com.submission.soilink.data.model.PostHistoryModel
+import com.submission.soilink.data.pref.UserPreference
+import com.submission.soilink.data.pref.dataStore
 import com.submission.soilink.databinding.ActivityCameraBinding
-import com.submission.soilink.util.EXTRA_IMAGE_URI
 import com.submission.soilink.util.NetworkCheck
+import com.submission.soilink.util.REQUIRED_COARSE_LOCATION_PERMISSION
+import com.submission.soilink.util.REQUIRED_FINE_LOCATION_PERMISSION
 import com.submission.soilink.util.createCustomTempFile
+import com.submission.soilink.util.getCurrentDate
 import com.submission.soilink.util.reduceFileImage
 import com.submission.soilink.util.showLocation
 import com.submission.soilink.util.showToast
@@ -38,8 +49,12 @@ import com.submission.soilink.util.uriToFile
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.home.HomeViewModel
 import com.submission.soilink.view.result.ResultActivity
+import com.submission.soilink.view.result.ResultActivity.Companion.EXTRA_IMAGE_URI
+import com.submission.soilink.view.result.ResultActivity.Companion.RESULT
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
-class CameraActivity : AppCompatActivity(), LocationListener {
+class CameraActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCameraBinding
     private lateinit var networkCheck: NetworkCheck
@@ -51,10 +66,11 @@ class CameraActivity : AppCompatActivity(), LocationListener {
     private var cameraProvider: ProcessCameraProvider? = null
     private var preview: Preview? = null
 
-    private lateinit var locationManager: LocationManager
     private var latitude: Double? = null
     private var longitude: Double? = null
     private val locationPermissionCode = 2
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     private val viewModel by viewModels<HomeViewModel> {
@@ -82,6 +98,7 @@ class CameraActivity : AppCompatActivity(), LocationListener {
 
     private fun setupAction() {
         networkCheck = NetworkCheck(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         binding.switchCam.setOnClickListener {
             cameraSelector =
@@ -94,7 +111,7 @@ class CameraActivity : AppCompatActivity(), LocationListener {
         binding.btnCamera.setOnClickListener {
             if (internetResult) {
                 showToast(this, getString(R.string.get_image))
-                getLocation()
+                requestLocationUpdates()
                 takePhoto()
             } else {
                 showToast(this, getString(R.string.no_internet_connection))
@@ -171,6 +188,9 @@ class CameraActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun takePhoto() {
+        val pref = UserPreference.getInstance(applicationContext.dataStore)
+        val user = runBlocking { pref.getSession().first() }
+
         val imageCapture = imageCapture ?: return
         val outputOptions = createCustomTempFile(this).build()
         showLoading(true)
@@ -190,37 +210,48 @@ class CameraActivity : AppCompatActivity(), LocationListener {
                             output.savedUri?.let { uri ->
                                 val imageFile = uriToFile(uri, context).reduceFileImage()
 
-                                viewModel.uploadPicture(imageFile)
-                                    .observe(this@CameraActivity) { result ->
-                                        if (result != null) {
-                                            when (result) {
-                                                is ResultState.Loading -> {
-                                                    showLoading(true)
-                                                }
+                                viewModel.locationUpdated.observe(this@CameraActivity) { locationResult ->
+                                    if (locationResult) {
+                                        val postHistory = PostHistoryModel(
+                                            email = user.email,
+                                            image = imageFile,
+                                            dateTime = getCurrentDate(),
+                                            lat = latitude,
+                                            long = longitude
+                                        )
 
-                                                is ResultState.Success -> {
-                                                    showToast(context, getString(R.string.post_successfull))
-                                                    val location = showLocation(context, latitude!!, longitude!!)
-                                                    showToast(context, location)
-                                                    val intent =
-                                                        Intent(context, ResultActivity::class.java)
-                                                    intent.putExtra(
-                                                        EXTRA_IMAGE_URI,
-                                                        output.savedUri.toString()
-                                                    )
-                                                    startActivity(intent)
-                                                    finish()
-                                                }
+                                        viewModel.addHistory(postHistory).observe(this@CameraActivity) { result ->
+                                            if (result != null) {
+                                                when (result) {
+                                                    is ResultState.Loading -> {
+                                                        showLoading(true)
+                                                    }
 
-                                                is ResultState.Error -> {
-                                                    bindCamera()
-                                                    showToast(context, result.error)
-                                                    showLoading(false)
+                                                    is ResultState.Success -> {
+                                                        showToast(
+                                                            context,
+                                                            getString(R.string.post_successfull)
+                                                        )
+                                                        val intent =
+                                                            Intent(
+                                                                context,
+                                                                ResultActivity::class.java
+                                                            )
+                                                        intent.putExtra(RESULT, postHistory)
+                                                        startActivity(intent)
+                                                        finish()
+                                                    }
+
+                                                    is ResultState.Error -> {
+                                                        bindCamera()
+                                                        showToast(context, result.error)
+                                                        showLoading(false)
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-
+                                }
                             }
                         }
 
@@ -256,19 +287,49 @@ class CameraActivity : AppCompatActivity(), LocationListener {
         cameraProvider?.unbind(preview)
     }
 
-    private fun getLocation() {
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
+    @Suppress("DEPRECATION")
+    private fun requestLocationUpdates() {
+        val locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(2000)
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult?.lastLocation?.let { location ->
+                    latitude = location.latitude
+                    longitude = location.longitude
+
+                    viewModel.setLocation(true)
+
+                    fusedLocationClient.removeLocationUpdates(this)
+                }
+            }
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5F, this)
-    }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                REQUIRED_COARSE_LOCATION_PERMISSION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                REQUIRED_FINE_LOCATION_PERMISSION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(REQUIRED_COARSE_LOCATION_PERMISSION),
+                locationPermissionCode
+            )
 
-    override fun onLocationChanged(location: Location) {
-        latitude = location.latitude
-        longitude = location.longitude
-
-        locationManager.removeUpdates(this)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(REQUIRED_FINE_LOCATION_PERMISSION),
+                locationPermissionCode
+            )
+        }
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {

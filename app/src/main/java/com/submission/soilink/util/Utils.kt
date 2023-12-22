@@ -134,22 +134,31 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     )
 }
 
-fun showLocation(context: Context, latitude: Double, longitude: Double): String {
+fun showLocation(context: Context, latitude: Double?, longitude: Double?): String {
     val geocoder = Geocoder(context, Locale.getDefault())
     var kecamatan: String? = null
     var kota: String? = null
+    var posisi: String? = null
     try {
-        val addresses = geocoder.getFromLocation(latitude, longitude, 1)!!
-        if (addresses.isNotEmpty()) {
-            val address: Address = addresses[0]
-            val addressDetails = "Address: ${address.getAddressLine(0)}"
-            kecamatan = address.locality ?: ""
-            kota = address.subAdminArea ?: ""
+        if (latitude != null && longitude != null) {
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)!!
+            if (addresses.isNotEmpty()) {
+                val address: Address = addresses[0]
+                val addressDetails = "Address: ${address.getAddressLine(0)}"
+                kecamatan = address.locality
+                kota = address.subAdminArea
+            }
+            posisi = "$kecamatan, $kota"
+        } else {
+            kecamatan = ""
+            kota = ""
+
+            posisi = "$kecamatan, $kota"
         }
     } catch (e: IOException) {
         e.printStackTrace()
     }
-    return "$kecamatan, $kota"
+    return posisi.toString()
 }
 
 fun ImageView.loadImage(url: String) {

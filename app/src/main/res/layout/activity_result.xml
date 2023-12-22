@@ -45,7 +45,49 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic"/>
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <ImageView
+                android:id="@+id/iv_date"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintEnd_toStartOf="@id/date"
+                app:layout_constraintTop_toTopOf="@id/date" />
+
+            <TextView
+                android:id="@+id/date"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="24, SEPTEMBER 2024"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_result"
+                app:layout_constraintTop_toTopOf="@id/resultSoilType" />
+
+            <ImageView
+                android:id="@+id/iv_gps"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_location"
+                app:layout_constraintEnd_toStartOf="@id/location"
+                app:layout_constraintTop_toTopOf="@id/location" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                android:text="Gubeng, Surabaya"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/resultSoilTypeDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date" />
+
 
             <View
                 android:id="@+id/view1"
@@ -53,23 +95,25 @@
                 android:layout_height="0dp"
                 android:alpha="0.70"
                 android:background="@drawable/soil_container"
-                app:layout_constraintBottom_toBottomOf="@+id/about1"
-                app:layout_constraintEnd_toEndOf="@+id/about1"
-                app:layout_constraintStart_toStartOf="@+id/about1"
-                app:layout_constraintTop_toTopOf="@+id/about1" />
+                app:layout_constraintBottom_toBottomOf="@+id/resultSoilType"
+                app:layout_constraintEnd_toEndOf="@+id/resultSoilType"
+                app:layout_constraintStart_toStartOf="@+id/resultSoilType"
+                app:layout_constraintTop_toTopOf="@+id/resultSoilType" />
 
             <TextView
-                android:id="@+id/about1"
+                android:id="@+id/resultSoilType"
                 style="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="16dp"
                 android:justificationMode="inter_word"
                 android:padding="14dp"
                 android:text="Hasil Result"
                 android:textAlignment="center"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/iv_date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_result"
                 tools:targetApi="o" />
@@ -80,42 +124,70 @@
                 android:layout_height="0dp"
                 android:alpha="0.70"
                 android:background="@drawable/soil_container"
+                app:layout_constraintBottom_toBottomOf="@+id/resultSoilTypeDescription"
+                app:layout_constraintEnd_toEndOf="@+id/resultSoilTypeDescription"
+                app:layout_constraintStart_toStartOf="@+id/resultSoilTypeDescription"
+                app:layout_constraintTop_toTopOf="@+id/resultSoilTypeDescription" />
+
+            <TextView
+                android:id="@+id/resultSoilTypeDescription"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:justificationMode="inter_word"
+                android:padding="14dp"
+                android:text="Deskripsi Hasil Result"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/resultSoilType"
+                tools:targetApi="o" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0.70"
+                android:background="@drawable/rounded_edittext"
                 app:layout_constraintBottom_toBottomOf="@+id/container2"
                 app:layout_constraintEnd_toEndOf="@+id/container2"
                 app:layout_constraintStart_toStartOf="@+id/container2"
                 app:layout_constraintTop_toTopOf="@+id/container2" />
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/container2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:orientation="vertical"
+                android:layout_marginTop="14dp"
+                android:contentDescription="Notes"
                 android:padding="14dp"
-                app:layout_constraintBottom_toTopOf="@id/buttonResult"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toTopOf="@id/btn_save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about1">
+                app:layout_constraintTop_toBottomOf="@+id/resultSoilTypeDescription">
 
-                <TextView
-                    android:id="@+id/about2"
+                <EditText
+                    android:id="@+id/note"
                     style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:justificationMode="inter_word"
+                    android:layout_height="150dp"
+                    android:ems="10"
+                    android:maxLines="5"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                    android:textAlignment="center"
                     android:textSize="14sp"
-                    tools:targetApi="o" />
-            </LinearLayout>
+                    app:errorEnabled="false" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/buttonResult"
+                android:id="@+id/btn_save"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Ini Button"
+                android:layout_marginTop="30dp"
+                android:text="Save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/container2" />

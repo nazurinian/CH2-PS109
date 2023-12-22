@@ -15,6 +15,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.submission.soilink.R
 import com.submission.soilink.databinding.ActivityHomeBinding
+import com.submission.soilink.util.Permission
+import com.submission.soilink.util.REQUIRED_CAMERA_PERMISSION
+import com.submission.soilink.util.REQUIRED_COARSE_LOCATION_PERMISSION
+import com.submission.soilink.util.REQUIRED_FINE_LOCATION_PERMISSION
+import com.submission.soilink.util.REQUIRED_WRITE_STORAGE_PERMISSION
 import com.submission.soilink.util.showToast
 import com.submission.soilink.view.ViewModelFactory
 import com.submission.soilink.view.camera.CameraActivity
@@ -22,29 +27,16 @@ import com.submission.soilink.view.camera.CameraActivity
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-
-    private val requestPermissionLaunch =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (!isGranted) {
-                showToast(this, "Camera permission denied")
-            } else {
-                showToast(this, "Camera permission granted")
-            }
-        }
-
-    private fun allPermissionsGranted() =
-        ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
-        ) == PackageManager.PERMISSION_GRANTED
+    private lateinit var permission: Permission
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        permission = Permission(this@HomeActivity) {
+            setupCamera()
+        }
         setupNavbar()
     }
 
@@ -64,20 +56,12 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.btnCamera.setOnClickListener {
-            setupCamera()
+            Permission.handlePermissionFlow(permission)
         }
     }
 
     private fun setupCamera() {
-        if (!allPermissionsGranted()) {
-            requestPermissionLaunch.launch(REQUIRED_PERMISSION)
-        } else{
-            val intent = Intent(this, CameraActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    companion object {
-        const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
     }
 }

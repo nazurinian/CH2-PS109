@@ -7,10 +7,12 @@ import com.submission.soilink.data.model.LoginRegistrationModel
 import com.submission.soilink.data.pref.UserModel
 import com.submission.soilink.data.pref.UserPreference
 import com.google.gson.Gson
+import com.submission.soilink.data.model.PostHistoryModel
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
 
@@ -112,6 +114,41 @@ class SoilInkRepository private constructor(
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getSoilList()
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
+    fun addHistory(postHistoryModel: PostHistoryModel) = liveData {
+        emit(ResultState.Loading)
+        val email = postHistoryModel.email.toRequestBody("text/plain".toMediaType())
+        val image = postHistoryModel.image.asRequestBody("image/*".toMediaType())
+        val soilType = postHistoryModel.soilType?.toRequestBody("text/plain".toMediaType())
+        val description = postHistoryModel.description?.toRequestBody("text/plain".toMediaType())
+        val note = postHistoryModel.note?.toRequestBody("text/plain".toMediaType())
+        val dateTime = postHistoryModel.dateTime?.toRequestBody("text/plain".toMediaType())
+        val lat = postHistoryModel.lat
+        val lon = postHistoryModel.long
+
+        val multipartBody = MultipartBody.Part.createFormData(
+            "file",
+            postHistoryModel.image.name,
+            image
+        )
+        try {
+            val successResponse = apiService.addHistory(
+                email,
+                multipartBody,
+                soilType,
+                description,
+                note,
+                dateTime,
+                lat,
+                lon
+            )
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

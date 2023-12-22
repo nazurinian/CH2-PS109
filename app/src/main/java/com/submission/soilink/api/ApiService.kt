@@ -4,6 +4,7 @@ import com.submission.soilink.api.response.ErrorResponse
 import com.submission.soilink.api.response.LoginResponse
 import com.submission.soilink.api.response.SoilListItems
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -48,4 +49,17 @@ interface ApiService {
 
     @GET("jenis-tanah")
     suspend fun getSoilList(): List<SoilListItems>
+
+    @Multipart
+    @POST("add-to-history")
+    suspend fun addHistory(
+        @Part("email") email: RequestBody,
+        @Part file: MultipartBody.Part,
+        @Part("soil_type") soilType: RequestBody? = null,
+        @Part("description") description: RequestBody? = null,
+        @Part("note") note: RequestBody? = null,
+        @Part("date_time") dateTime: RequestBody? = null,
+        @Part("lat") lat: Double? = null,
+        @Part("long") long: Double? = null
+    ): ErrorResponse
 }
