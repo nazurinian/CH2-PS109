@@ -8,24 +8,23 @@ const firebase = require('firebase/app');
 const firebaseauth = require('firebase/auth');
 const { Storage } = require('@google-cloud/storage');
 const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
-const { OAuth2Client } = require('google-auth-library');
-const googleClientId = '985911723534-nt20v2sijh9s2e9qnbjfv36dpgkh9q5c.apps.googleusercontent.com';
-const googleClientSecret = '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';
-const port = process.env.PORT || 3000;
+const fs = require('fs');
+const Multer = require('multer');
+const Inert = require('@hapi/inert');
+const Joi = require('joi');
+const Vision = require('@hapi/vision');
+const { v4: uuidv4 } = require('uuid');
+const jwt = require('jsonwebtoken');
+const port = process.env.PORT || 5000;
 
-const client = new OAuth2Client({
-  clientId: googleClientId,
-  clientSecret: googleClientSecret,
-});
 
 
 const storage = new Storage({
-  keyFilename: 'soilink.json', // Ganti dengan path file kredensial Anda
+  keyFilename: 'soilink.json',
   projectId: 'soilink',
 });
 
-const bucket = storage.bucket('staging.soilink.appspot.com');
+const jenisTanahData = require('./tanah.json');
 
 const firebaseConfig = require('./firebaseConfig.json');
 
@@ -49,8 +48,7 @@ const init = async () => {
   });
 
   await server.register(require('@hapi/inert'));
-  const storageConfig = Multer.memoryStorage();
-  const upload = Multer({ storage: storageConfig });
+  await server.register(Vision);
 
   server.route({
     method: 'GET',
@@ -77,95 +75,25 @@ const init = async () => {
     },
   });
 
-  // server.route({
-  //   method: 'GET',
-  //   path: '/login',
-  //   handler: (request, h) => {
-  //     try {
-  //       // Logika autentikasi, jika diperlukan
-        
-  //       // Jika autentikasi berhasil
-  //       return h.response({ success: true }).code(200);
-        
-  //       // Jika autentikasi gagal
-  //       // return h.response({ success: false, message: 'Autentikasi gagal' }).code(401);
-        
-  //     } catch (error) {
-  //       console.error(error);
-  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
-  //     }
-  //   },
-  // });
+    server.route({
+    method: 'GET',
+    path: '/profile',
+    handler: async (request, h) => {
+      try {
+        const userRecord = await admin.auth().getUserByEmail(request.auth.credentials.uid);
   
-  // server.route({
-  //   method: 'GET',
-  //   path: '/signup',
-  //   handler: (request, h) => {
-  //     try {
-  //       // Logika pendaftaran, jika diperlukan
-        
-  //       // Jika pendaftaran berhasil
-  //       return h.response({ success: true }).code(200);
-        
-  //       // Jika pendaftaran gagal
-  //       // return h.response({ success: false, message: 'Pendaftaran gagal' }).code(403);
-        
-  //     } catch (error) {
-  //       console.error(error);
-  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
-  //     }
-  //   },
-  // });
-
-  // server.route({
-  //   method: 'GET',
-  //   path: '/login',
-  //   handler: async (request, h) => {
-  //     try {
-  //       // Logika autentikasi, jika diperlukan
-        
-  //       // Contoh autentikasi yang selalu menghasilkan kesalahan
-  //       throw new Error('Autentikasi gagal');
-        
-  //       // Jika autentikasi berhasil
-  //       return h.response({ success: true }).code(200);
-        
-  //     } catch (error) {
-  //       console.error(error);
+        const userProfile = {
+          nama: userRecord.displayName,
+          email: userRecord.email,
+        };
   
-  //       // Catat detail kesalahan ke log file atau sistem pelacakan kesalahan
-  //       // fs.appendFileSync('error.log', `${new Date().toISOString()}: ${error.message}\n`);
-  
-  //       // Kembalikan respons HTTP dengan pesan kesalahan yang umum
-  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
-  //     }
-  //   },
-  // });
-  
-  // server.route({
-  //   method: 'GET',
-  //   path: '/signup',
-  //   handler: async (request, h) => {
-  //     try {
-  //       // Logika pendaftaran, jika diperlukan
-        
-  //       // Contoh pendaftaran yang selalu menghasilkan kesalahan
-  //       throw new Error('Pendaftaran gagal');
-        
-  //       // Jika pendaftaran berhasil
-  //       return h.response({ success: true }).code(200);
-        
-  //     } catch (error) {
-  //       console.error(error);
-  
-  //       // Catat detail kesalahan ke log file atau sistem pelacakan kesalahan
-  //       // fs.appendFileSync('error.log', `${new Date().toISOString()}: ${error.message}\n`);
-  
-  //       // Kembalikan respons HTTP dengan pesan kesalahan yang umum
-  //       return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
-  //     }
-  //   },
-  // });
+        return { success: true, profile: userProfile };
+      } catch (error) {
+        console.error('Error fetching user profile:', error.message);
+        return h.response({ success: false, message: 'Gagal mengambil profil pengguna' }).code(500);
+      }
+    },
+  });
 
   server.route({
     method: 'POST',
@@ -176,41 +104,68 @@ const init = async () => {
   
         console.log('Login attempt for email:', email);
   
-        // Dapatkan informasi khusus untuk otentikasi dari Firestore
+        const bucket = storage.bucket('soil-bucket');
+        const jsonFileName = `History/userHistory-${email}.json`; 
+        console.log('Fetching user history from file:', jsonFileName);
+        const jsonFileObject = bucket.file(jsonFileName);
+        console.log('File :', jsonFileObject);
+
+        let userHistoryFromBucket = { history: [] };
+        try {
+          const [userHistoryFile] = await jsonFileObject.download();
+          userHistoryFromBucket = JSON.parse(userHistoryFile.toString());
+          console.log('Fetched user history successfully:', userHistoryFromBucket);
+        } catch (error) {
+          if (error.code !== 404) {
+            console.error('Error fetching user history from Cloud Storage:', error.message);
+            return h.response({ success: false, message: 'Error fetching user history' }).code(500);
+          }
+          console.log('User history file not found for:', email);
+        }
+  
+        if (!userHistoryFromBucket.history) {
+          userHistoryFromBucket.history = [];
+        }
+  
         const userDoc = await admin.firestore().collection('users').doc(email).get();
         const customAuthInfo = userDoc.data()?.customAuthInfo || '';
   
         if (customAuthInfo) {
-          // Bandingkan password yang diberikan dengan informasi khusus
+          if (!password) {
+            console.log('Invalid credentials: Password not provided');
+            return { success: false, message: 'Invalid credentials: Password not provided' };
+          }
+  
           const isPasswordValid = await bcrypt.compare(password, customAuthInfo);
   
           if (isPasswordValid) {
             console.log('Password benar');
-  
-            // Dapatkan informasi pengguna dari Firebase Admin SDK
-            const userRecord = await admin.auth().getUserByEmail(email);
-  
             if (request.auth && !request.auth.isAuthenticated && request.cookieAuth) {
-              request.cookieAuth.set({ uid: userRecord.uid });
+              request.cookieAuth.set({ uid: email });
             }
   
-            return { success: true, message: 'Login berhasil', user: userRecord.toJSON() };
+            const userRecord = await admin.auth().getUserByEmail(email);
+  
+            return h.response({
+              success: true,
+              user: userRecord,
+              userHistory: userHistoryFromBucket
+            }).code(200);
           } else {
             console.log('Invalid credentials');
-            return { success: false, message: 'Password salah, Invalid Credentials' };
+            return h.response({ success: false, message: 'Invalid Credentials: Wrong Password' }).code(401);
           }
         } else {
           console.log('User does not have customAuthInfo');
-          return { success: false, message: 'Invalid credentials' };
+          return h.response({ success: false, message: 'Invalid credentials: User not found' }).code(401);
         }
       } catch (error) {
         console.error('Error during login:', error);
-        return h.response({ success: false, message: 'Login gagal', error: error.message }).code(401);
+        return h.response({ success: false, message: 'Login failed', error: error.message }).code(400);
       }
     },
   });
-  // Route untuk signup
-  // Route untuk signup
+  
   server.route({
     method: 'POST',
     path: '/signup',
@@ -222,17 +177,14 @@ const init = async () => {
       }
 
       try {
-        // Buat hash dari password sebelum menyimpan ke Firebase
-        const hashedPassword = await bcrypt.hash(password, 10); // Ganti 10 dengan biaya yang sesuai
-
-        // Simpan informasi khusus untuk otentikasi (contoh: token atau hashed info) di Firebase
+        const hashedPassword = await bcrypt.hash(password, 10); 
         await admin.firestore().collection('users').doc(email).set({
           customAuthInfo: hashedPassword,
         });
 
         const userRecord = await admin.auth().createUser({
           email,
-          password: hashedPassword, // Gunakan hash password
+          password: hashedPassword,
           displayName: nama,
         });
 
@@ -240,10 +192,32 @@ const init = async () => {
           request.cookieAuth.set({ uid: userRecord.uid });
         }
 
-        return { success: true, message: 'Signup berhasil', user: userRecord.toJSON() };
+        return h.response({ success: true, message: 'Signup successful', user: userRecord.toJSON() }).code(201);
       } catch (error) {
         console.error('Error during signup:', error.message);
-        return h.response({ success: false, message: 'Signup gagal', error: error.message }).code(400);
+        return h.response({ success: false, message: 'Signup failed', error: error.message }).code(400);
+      }
+    },
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/profile',
+    handler: async (request, h) => {
+      try {
+        const { email } = request.payload;
+        
+        await admin.firestore().collection('users').doc(email).get();
+            const userRecord = await admin.auth().getUserByEmail(email);
+  
+            if (request.auth && !request.auth.isAuthenticated && request.cookieAuth) {
+              request.cookieAuth.set({ uid: userRecord.uid });
+            }
+  
+            return h.response({ success: true, message: 'Successfully get the user profile', user: userRecord.toJSON() }).code(200);
+      } catch (error) {
+        console.error('Error during login:', error);
+        return h.response({ success: false, message: 'Failed to get the user profile', error: error.message }).code(401);
       }
     },
   });
@@ -255,34 +229,28 @@ const init = async () => {
       try {
         const { email } = request.payload;
   
-        // Verifikasi apakah email ada dalam sistem
         const userRecord = await admin.auth().getUserByEmail(email);
   
-        // Token unik untuk reset password
         const resetToken = generateUniqueToken();
   
-        // Set waktu reset
         const expirationTime = new Date();
-        expirationTime.setHours(expirationTime.getHours() + 1); // Add 1 hour
+        expirationTime.setHours(expirationTime.getHours() + 1); 
   
         await admin.firestore().collection('passwordResetTokens').doc(email).set({
           token: resetToken,
           expirationTime: expirationTime,
         });
   
-        // Link untuk reset token
         const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
   
-        // Create nodemailer transporter
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
             user: 'soilinkidn@gmail.com',
-            pass: 'eucp bkjg cvyq egaq', // Use the generated App Password here
+            pass: 'eucp bkjg cvyq egaq', 
           },
         });
   
-        // Pengaturan Format Pengiriman Email
         const mailOptions = {
           from: 'soilinkidn@gmail.com',
           to: email,
@@ -296,12 +264,14 @@ const init = async () => {
         await admin.firestore().collection('passwordResetTokens').doc(email).set({
           token: resetToken,
           expirationTime: expirationTime,
-          email: email, // tambahkan informasi email
+          email: email, 
         });
 
         return h.response({ success: true, message: 'Reset password link sent successfully.' });
       } catch (error) {
-        console.error('Error during forgot password:', error.message);
+          if (error.code === 'auth/user-not-found') {
+          return h.response({ success: false, message: 'Email not found in the system.' }).code(404);
+        }
         return h.response({ success: false, message: 'Failed to process forgot password request.' }).code(500);
       }
     },
@@ -314,24 +284,22 @@ const init = async () => {
       try {
         const { token } = request.query;
   
-        // Dapatkan informasi reset token dan waktu kadaluarsa dari Firestore
         const resetTokenDoc = await admin.firestore().collection('passwordResetTokens').where('token', '==', token).get();
         if (resetTokenDoc.empty) {
-          return h.response({ success: false, message: 'Token reset password tidak valid atau telah kadaluarsa.' });
+          return h.response({ success: false, message: 'The password reset token is invalid or has expired' }).code(400);
         }
   
         const resetTokenData = resetTokenDoc.docs[0].data();
         const expirationTime = resetTokenData.expirationTime.toDate();
   
         if (expirationTime < new Date()) {
-          return h.response({ success: false, message: 'Token reset password telah kadaluarsa.' });
+          return h.response({ success: false, message: 'Password reset token has expired' }).code(400);
         }
   
-        // Tampilkan halaman reset password
         return h.file(Path.join(__dirname, 'views', 'reset-password.html'));
       } catch (error) {
         console.error('Error during reset password page load:', error.message);
-        return h.response({ success: false, message: 'Gagal memuat halaman reset password.' }).code(500);
+        return h.response({ success: false, message: 'Failed to load the password reset page' }).code(500);
       }
     },
   });
@@ -343,92 +311,306 @@ const init = async () => {
       try {
         const { token, newPassword, confirmNewPassword } = request.payload;
   
-        // Dapatkan informasi reset token dan waktu kadaluarsa dari Firestore
         const resetTokenDoc = await admin.firestore().collection('passwordResetTokens').where('token', '==', token).get();
         if (resetTokenDoc.empty) {
-          return h.response({ success: false, message: 'Token reset password tidak valid atau telah kadaluarsa.' });
+          return h.response({ success: false, message: 'The password reset token is invalid or has expired' }).code(400);
         }
   
         const resetTokenData = resetTokenDoc.docs[0].data();
         const expirationTime = resetTokenData.expirationTime.toDate();
-        const email = resetTokenData.email; // Definisikan variabel email
+        const email = resetTokenData.email;
   
         if (expirationTime < new Date()) {
-          return h.response({ success: false, message: 'Token reset password telah kadaluarsa.' });
+          return h.response({ success: false, message: 'Password reset token has expired' }).code(400);
         }
   
         if (newPassword === confirmNewPassword) {
-          // Update password khusus untuk otentikasi di Firestore
           const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-  
-          // Gantilah email dengan email yang digunakan pada saat membuat reset token
+          
           console.log('Email:', email);
           const userDoc = await admin.firestore().collection('users').doc(email).get();
           await admin.firestore().collection('users').doc(email).set({
             customAuthInfo: hashedNewPassword,
-          }, { merge: true }); // Menggunakan merge: true untuk menggabungkan data dengan dokumen yang sudah ada
-  
-          // Hapus reset token dari Firestore setelah digunakan
+          }, { merge: true }); 
+        
           await admin.firestore().collection('passwordResetTokens').doc(email).delete();
   
-          return { success: true, message: 'Password berhasil direset.' };
+          return h.response({ success: true, message: 'Password is successfully reset' }).code(200);
         } else {
-          return { success: false, message: 'Konfirmasi password baru tidak sesuai.' };
+          return h.response({ success: false, message: 'Confirmation of new password is not correct' }).code(400);
         }
       } catch (error) {
         console.error('Error during password reset:', error.message);
-        return h.response({ success: false, message: 'Reset password gagal', error: error.message }).code(400);
-      }
-    },
-  });
-  
-  server.route({
-    method: 'GET',
-    path: '/login/google',
-    handler: (request, h) => {
-      // Redirect ke URL otorisasi Google
-      const redirectUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${client.options.clientId}&redirect_uri=${encodeURIComponent('http://localhost:3000/login/google/callback')}&response_type=code&scope=email%20profile&access_type=offline`;
-      return h.redirect(redirectUrl);
-    },
-  });
-  
-  server.route({
-    method: 'GET',
-    path: '/login/google/callback',
-    handler: async (request, h) => {
-      try {
-        const { code } = request.query;
-  
-        // Dapatkan token akses dari kode otorisasi
-        const tokenResponse = await client.getToken({ code });
-        const { id_token } = tokenResponse.tokens;
-  
-        // Verifikasi token ID Google menggunakan Firebase Authentication
-        const ticket = await client.verifyIdToken({
-          idToken: id_token,
-          audience: '985911723534-nt20v2sijh9s2e9qnbjfv36dpgkh9q5c.apps.googleusercontent.com', // Ganti dengan ID Klien Google Anda
-        });
-  
-        const payload = ticket.getPayload();
-        const googleUserId = payload['sub']; // ID unik pengguna Google
-  
-        // Lakukan login dengan menggunakan googleUserId, misalnya menyimpan ke Firebase Authentication
-        // Anda dapat menggabungkannya dengan logika login yang ada di aplikasi Anda
-  
-        return h.response({ success: true, message: 'Login dengan Google berhasil' }).code(200);
-      } catch (error) {
-        console.error('Error during Google login:', error.message);
-        return h.response({ success: false, message: 'Login dengan Google gagal' }).code(401);
+        return h.response({ success: false, message: 'Password reset failed', error: error.message }).code(400);
       }
     },
   });
 
+    server.route({
+    method: 'POST',
+    path: '/upload',
+    options: {
+      payload: {
+          maxBytes: 10485760,
+          output: 'stream',
+          parse: true,
+          allow: 'multipart/form-data',
+          multipart: true,
+      },
+      validate: {
+          payload: Joi.object({
+              file: Joi.any()
+                  .meta({ swaggerType: 'file' })
+                  .required()
+                  .description('Image file'),
+          }),
+      },
+    },
+    handler: async (request, h) => {
+        try {
+            const file = request.payload.file;
+            const fileName = file.hapi.filename;
+            const fileBuffer = file._data;
+
+            console.log('Received file:', fileName);
+
+            const bucket = storage.bucket('soil-bucket');
+            const imageName = `Images/${fileName}`;
+            const fileObject = bucket.file(imageName);
+
+
+            await fileObject.save(fileBuffer);
+
+            console.log('File saved to Cloud Storage:', fileName);
+
+            return { success: true, message: 'File uploaded successfully' };
+        } catch (error) {
+            if (error instanceof Multer.MulterError) {
+                console.error('Multer error:', error.message);
+                return h.response({ success: false, message: 'Error uploading file', error: error.message }).code(400);
+            } else {
+                console.error('Internal server error:', error);
+                return h.response({ success: false, message: 'Internal Server Error' }).code(500);
+            }
+        }
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/images/{filename}',
+    handler: (request, h) => {
+        const fileName = request.params.filename;
+
+        const bucket = storage.bucket('soil-bucket'); 
+        const file = bucket.file(fileName);
+
+        return file.createReadStream().pipe(h.response(file.createReadStream()).type('image/jpeg'));
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/jenis-tanah',
+    handler: (request, h) => {
+      try {
+        const jenisTanahList = jenisTanahData.jenisTanah.map(jenisTanahItem => ({
+          nama: jenisTanahItem.nama,
+          deskripsi: jenisTanahItem.deskripsi,
+          gambar: `https://storage.googleapis.com/soil-bucket/gambar_tanah/${jenisTanahItem.gambar}`,
+        }));
+  
+        return h.response(jenisTanahList);
+      } catch (error) {
+        console.error('Error handling GET jenis tanah:', error.message);
+        return h.response({ success: false, message: 'Internal Server Error' }).code(500);
+      }
+    },
+  });
+  
+  server.route({
+    method: 'GET',
+    path: '/jenis-tanah/{jenis}/gambar',
+    handler: (request, h) => {
+      try {
+        const requestedJenis = request.params.jenis.toLowerCase();
+        const jenisTanahItem = jenisTanahData.jenisTanah.find(
+          (jenis) => jenis.nama.toLowerCase() === requestedJenis
+        );
+  
+        if (jenisTanahItem && jenisTanahItem.gambar) {
+          const publicURL = `https://storage.googleapis.com/soil-bucket/gambar_tanah/${jenisTanahItem.gambar}`;
+        
+        let contentType = 'image/jpeg';
+        if (jenisTanahItem.gambar.endsWith('.png')) {
+          contentType = 'image/png';
+        }
+
+        return h.response().redirect(publicURL).type(contentType);
+        } else {
+          return h
+            .response({
+              success: false,
+              message: 'Jenis tanah atau gambar tidak ditemukan',
+            })
+            .code(404);
+        }
+      } catch (error) {
+        console.error('Error handling GET gambar:', error.message);
+        return h
+          .response({
+            success: false,
+            message: 'Internal Server Error',
+          })
+          .code(500);
+      }
+    },
+  });
+  
+  
+  server.route({
+    method: 'POST',
+    path: '/add-to-history',
+    options: {
+      payload: {
+        maxBytes: 10485760,
+        output: 'stream',
+        parse: true,
+        allow: 'multipart/form-data',
+        multipart: true,
+      },
+      validate: {
+        payload: Joi.object({
+          email: Joi.string().email().required().description('User email'),
+          soil_type: Joi.string().allow('').default('').description('Soil type'),
+          description: Joi.string().allow('').default('').description('Description'),
+          note: Joi.string().allow('').default('').description('Note'),
+          date_time: Joi.string().allow('').default('').description('Date and time'),
+          lat: Joi.string().allow('').default('').description('Latitude'),
+          long: Joi.string().allow('').default('').description('Longitude'),
+          file: Joi.any()
+            .meta({ swaggerType: 'file' })
+            .allow('')
+            .default('')
+            .description('Image file'),
+        }),
+      },
+    },
+    handler: async (request, h) => {
+      try {
+        const { email, file, soil_type, description, note, date_time, lat, long } = request.payload;
+
+        let publicUrl = '';
+        let userHistory = {};
+
+        if (file) {
+          const authId = generateAuthId();
+
+          const fileName = `images/${uuidv4()}-${file.hapi.filename}`;
+          const bucket = storage.bucket('soil-bucket');
+          const fileObject = bucket.file(fileName);
+          const fileBuffer = file._data;
+
+          await fileObject.save(fileBuffer, { contentType: file.hapi.headers['content-type'] });
+
+          publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileObject.name}`;
+        }
+
+        const jsonFileName = `History/userHistory-${email}.json`;
+        const bucket = storage.bucket('soil-bucket');
+        const jsonFileObject = bucket.file(jsonFileName);
+
+        try {
+          const [userHistoryFile] = await jsonFileObject.download();
+
+          userHistory = JSON.parse(userHistoryFile.toString());
+        } catch (error) {
+          if (error.code === 404) {
+            userHistory = { [email]: { history: [] } };
+          } else {
+            console.error('Error fetching user history from Cloud Storage:', error.message);
+            return h.response({ success: false, message: 'Error fetching user history' }).code(500);
+          }
+        }
+        userHistory[email] = userHistory[email] || { history: [] };
+
+        userHistory[email].history.push({
+          id: generateAuthId(),
+          image: publicUrl || '', 
+          soil_type: soil_type || '',
+          description: description || '',
+          note: note || '',
+          date_time: date_time || '',
+          lat: lat || '',
+          long: long || '',
+        });
+
+        const userHistoryJson = JSON.stringify(userHistory, null, 2);
+
+        await jsonFileObject.save(userHistoryJson, { contentType: 'application/json' });
+
+        return {
+          success: true,
+          message: 'Data added to user history successfully',
+          userHistory,
+        };
+      } catch (error) {
+        console.error('Error during adding to history:', error.message);
+        return h
+          .response({
+            success: false,
+            message: 'Failed to add data to user history.',
+            error: error.message,
+          })
+          .code(500);
+      }
+    },
+  });
+  
+  function generateAuthId() {
+    return uuidv4();
+  }
+
+  server.route({
+    method: 'GET',
+    path: '/get-history/{email}',
+    handler: async (request, h) => {
+      try {
+        const { email } = request.params;
+  
+        const bucket = storage.bucket('soil-bucket');
+        const jsonFileName = `History/userHistory-${email}.json`;
+        const jsonFileObject = bucket.file(jsonFileName);
+  
+        let userHistory = {};
+  
+        try {
+          const [userHistoryFile] = await jsonFileObject.download();
+  
+          userHistory = JSON.parse(userHistoryFile.toString());
+        } catch (error) {
+          if (error.code === 404) {
+            return h.response({ success: false, message: 'User history not found' }).code(404);
+          } else {
+            console.error('Error fetching user history from Cloud Storage:', error.message);
+            return h.response({ success: false, message: 'Error fetching user history' }).code(500);
+          }
+        }
+  
+        return { success: true, userHistory };
+      } catch (error) {
+        console.error('Error during fetching user history:', error.message);
+        return h.response({ success: false, message: 'Failed to fetch user history.', error: error.message }).code(500);
+      }
+    },
+  });
+  
 
   server.route({
     method: '*',
     path: '/{any*}',
     handler: (request, h) => {
-      return h.response({ success: false, message: 'Rute tidak ditemukan' }).code(404);
+      return h.response({ success: false, message: 'Route not found' }).code(404);
     },
   });
 
@@ -436,13 +618,13 @@ const init = async () => {
     const response = request.response;
     if (response.isBoom) {
       console.error('Error:', response.message);
-      return h.response({ success: false, message: 'Terjadi kesalahan internal' }).code(500);
+      return h.response({ success: false, message: 'An internal error occurred' }).code(500);
     }
     return h.continue;
   });
 
   await server.start();
-  console.log('Server berjalan di', server.info.uri);
+  console.log('Server running on', server.info.uri);
 };
 
 process.on('unhandledRejection', (err) => {
