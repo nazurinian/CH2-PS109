@@ -1,0 +1,44 @@
+{
+    "jenisTanah": [
+      {
+        "nama": "Aluvial",
+        "deskripsi": "Tanah aluvial, yang terbentuk oleh deposit sungai, seringkali subur dan memiliki tekstur tanah yang baik. Ini membuatnya cocok untuk pembangunan. Namun, harus diingat bahwa daerah aluvial seringkali rentan terhadap banjir, sehingga perlu perencanaan yang baik untuk mengatasi potensi risiko banjir.",
+        "gambar": "aluvial.png"
+      },
+      {
+        "nama": "Andosol",
+        "deskripsi": "Tanah andosol adalah tanah yang terbentuk dari proses pelapukan batuan gunung berapi. Tanah andosol sangat berpori, berwarna gelap, dan biasanya terbentuk dari bahan induk asal vulkanik, seperti abu vulkanik, tufa, serta batu apung. Tanah andosol merupakan jenis tanah yang sangat bagus untuk dimanfaatkan sebagai lahan pertanian. Cocok untuk pertanian dan kebun karena kesuburan dan kemampuan menyimpan air. Perlu diperhatikan potensi longsor dan aktivitas vulkanik.",
+        "gambar": "andosol.png"
+      },
+      {
+        "nama": "Entisol",
+        "deskripsi": "Entisol adalah tanah muda yang belum mengalami perkembangan horison yang jelas. Meskipun tidak selalu subur, tanah ini dapat cocok untuk pembangunan ringan. Manajemen tanah yang baik diperlukan untuk mengatasi masalah erosi dan mempertahankan struktur tanah.",
+        "gambar": "entisol.png"
+      },
+      {
+        "nama": "Humus",
+        "deskripsi": "Tanah humus memiliki kandungan bahan organik yang tinggi, menjadikannya subur dan cocok untuk pertanian dan kebun. Namun, perlu diperhatikan bahwa pembangunan di atas tanah humus dapat memerlukan manajemen tanah yang hati-hati agar tidak merusak struktur tanah dan mengurangi kesuburan.",
+        "gambar": "humus.png"
+      },
+      {
+        "nama": "Inceptisol",
+        "deskripsi": "Inceptisol adalah tanah yang relatif muda, sehingga seringkali cukup cocok untuk pembangunan. Namun, perlu diperhatikan manajemen air dan unsur hara. Drainase dan pengaturan irigasi yang baik menjadi kunci, dan seringkali perlu diperhatikan untuk menjaga kesuburan tanah.",
+        "gambar": "inceptisol.png"
+      },
+      {
+        "nama": "Kapur",
+        "deskripsi": "Tanah kapur, dengan kandungan kalsium tinggi, biasanya cukup cocok untuk pembangunan umum. Namun, perlu diperhatikan bahwa tanah kapur dapat meningkatkan pH tanah, sehingga perlu diatur dengan bijaksana. Tanaman yang toleran terhadap kondisi tanah kapur lebih disarankan untuk pertumbuhan yang optimal.",
+        "gambar": "kapur.png"
+      },
+      {
+        "nama": "Laterit",
+        "deskripsi": "Laterit, dengan kandungan besi dan aluminium yang tinggi, seringkali keras dan sulit diolah. Pembangunan berat seperti gedung bertingkat atau jalan tol mungkin memerlukan teknik konstruksi khusus untuk mengatasi karakteristik kekerasan tanah ini. Pemeliharaan perlu dilakukan untuk menghindari erosi dan perubahan bentuk tanah.",
+        "gambar": "laterit.png"
+      },
+      {
+        "nama": "Pasir",
+        "deskripsi": "Tanah pasir memiliki keuntungan drainase yang baik, membuatnya cocok untuk pembangunan di daerah dengan curah hujan tinggi. Namun, karena kurangnya kandungan lempung dan humus, tanah ini kurang stabil. Oleh karena itu, untuk pembangunan berat atau struktur tinggi, perlu perencanaan fondasi yang cermat untuk mengatasi ketidakstabilan tanah.",
+        "gambar": "pasir.png"
+      }
+    ]
+  }
